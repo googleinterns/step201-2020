@@ -3,6 +3,7 @@ package com.google.step.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gson.Gson;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 /** Class contains the common used helper method for servlets.*/
@@ -23,6 +24,13 @@ public final class ServletHelper {
       return defaultValue;
     }
     return value;
+  }
+
+  /**
+   * Converts an List instance into the JSON format
+   */
+  protected static final <T> String convertToJson(List<T> messages) {
+    return GSON.toJson(messages);
   }
 
   /** Disables the default constructor */
