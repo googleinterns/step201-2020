@@ -10,10 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-
-  private static final UserService USERSERVICE = 
-      UserServiceFactory.getUserService();
-
   @Override
   public void doGet(HttpServletRequest request, 
                     HttpServletResponse response) throws IOException {
@@ -33,4 +29,7 @@ public class LoginServlet extends HttpServlet {
       response.getWriter().println(USERSERVICE.createLoginURL("/index.html"));
     }
   }
+
+  private static final UserService USERSERVICE = 
+      UserServiceFactory.getUserService();
 }
