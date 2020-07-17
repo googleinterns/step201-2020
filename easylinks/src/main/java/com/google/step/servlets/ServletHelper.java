@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 public final class ServletHelper {
 
   /* The static store service that can be used to all servlets */
-  protected final static DatastoreService DEFAULT_DATASTORE_SERVICE
-                            = DatastoreServiceFactory.getDatastoreService();
+  protected final static DatastoreService DEFAULT_DATASTORE_SERVICE = 
+                                DatastoreServiceFactory.getDatastoreService();
   protected final static Gson GSON = new Gson();
 
   /** 
