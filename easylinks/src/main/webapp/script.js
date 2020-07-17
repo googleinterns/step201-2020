@@ -1,3 +1,5 @@
+/** Script code for the EasyLink project */
+
 /**
  * Checks user authentication. 
  * Redirects to login page if user is not logged in
