@@ -12,12 +12,28 @@ public class EasyLinkServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String easyLink = ServletHelper.getParameterWithDefault(request, "easy-link", );
-    if (!easyLink.startsWith(HTTP)) {
-      easyLink = HTTP + easyLink;
+    String[] easyLink = ServletHelper.getParameterWithDefault(request, "easy-link", "").split("/");
+    // Process the easy link based on its type
+    switch (easyLink[0])
+    {
+      case PUBLIC_LINK:
+        // TODO: Process the public link
+        break;
+      case PRIVATE_LINK:
+        break;
+      case NAVIGATION_LINK:
+        break;
+      case PEOPLE_SEARCH_LINK:
+        break;
+      default:
+        response.getWriter().println("Error input link!");
+        break;
     }
-    response.sendRedirect(easyLink);
   }
 
-  private static final String HTTP = "http://";
+  /** Private constants for different types of link */
+  private static final String PUBLIC_LINK = "~";
+  private static final String PRIVATE_LINK = "go";
+  private static final String NAVIGATION_LINK = "~where";
+  private static final String PEOPLE_SEARCH_LINK = "~who";
 }
