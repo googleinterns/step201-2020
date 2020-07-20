@@ -12,28 +12,24 @@ public class EasyLinkServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String[] easyLink = ServletHelper.getParameterWithDefault(request, "easy-link", "").split("/");
+    String easyLink = ServletHelper.getParameterWithDefault(request, "easy-link", "");
 
-    switch (easyLink[0])
-    {
-      case EMPTY_LINK:
-        response.sendRedirect(HOME_PAGE);
-        break;
-      case PROVIDED_LINK:
-        break;
-      case NAVIGATION_LINK:
-        break;
-      case PEOPLE_SEARCH_LINK:
-        break;
-      default:
-        // Customized links
-        break;
+    if (easyLink.isEmpty()) {
+      response.sendRedirect(HOME_PAGE);
+    } else if (easyLink.startsWith(PROVIDED_LINK)) {
+      // TODO: Search the datastore to find the link
+    } else if (easyLink.startsWith(NAVIGATION_LINK)) {
+      // TODO: Navigate
+    } else if (easyLink.startsWith(PEOPLE_SEARCH_LINK)) {
+      // TODO: Search the people
+    } else {
+      // TODO: Process the customized link
     }
+    
   }
 
   /** Private constants for different types of link */
   private static final String PROVIDED_LINK = "~";
-  private static final String EMPTY_LINK = "";
   private static final String NAVIGATION_LINK = "~where";
   private static final String PEOPLE_SEARCH_LINK = "~who";
   private static final String HOME_PAGE = "/index.html";
