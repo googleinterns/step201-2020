@@ -16,11 +16,11 @@ public class EasyLinkServlet extends HttpServlet {
 
     if (easyLink.isEmpty()) {
       response.sendRedirect(HOME_PAGE);
-    } else if (easyLink.startsWith(PROVIDED_LINK)) {
-      // TODO: Search the datastore to find the link
     } else if (easyLink.startsWith(NAVIGATION_LINK)) {
-      // TODO: Navigate
+      // TODO: Search the datastore to find the link
     } else if (easyLink.startsWith(PEOPLE_SEARCH_LINK)) {
+      // TODO: Navigate
+    } else if (easyLink.startsWith(PROVIDED_LINK)) {
       // TODO: Search the people
     } else {
       // TODO: Process the customized link
