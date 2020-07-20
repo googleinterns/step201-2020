@@ -1,7 +1,6 @@
 package com.google.step.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import com.google.step.servlets.ServletHelper;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,8 +14,8 @@ public class LoginServlet extends HttpServlet {
                     HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
     
-    if (USERSERVICE.isUserLoggedIn()) {
-      String email = USERSERVICE.getCurrentUser().getEmail();
+    if (ServletHelper.USERSERVICE.isUserLoggedIn()) {
+      String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
 
       if (email.split("@")[1].equals("columbia.edu")) {
         response.getWriter().println("okay-columbia");
@@ -26,10 +25,8 @@ public class LoginServlet extends HttpServlet {
       }
     } else {
       // Return Login link if user is not logged in
-      response.getWriter().println(USERSERVICE.createLoginURL("/index.html"));
+      response.getWriter().println(ServletHelper.USERSERVICE
+                                                .createLoginURL("/index.html"));
     }
   }
-
-  private static final UserService USERSERVICE = 
-      UserServiceFactory.getUserService();
 }

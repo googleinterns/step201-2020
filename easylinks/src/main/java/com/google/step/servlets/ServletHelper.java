@@ -1,5 +1,7 @@
 package com.google.step.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gson.Gson;
@@ -12,6 +14,8 @@ public final class ServletHelper {
   /* The static store service that can be used to all servlets */
   protected final static DatastoreService DEFAULT_DATASTORE_SERVICE = 
                                 DatastoreServiceFactory.getDatastoreService();
+  protected final static UserService USERSERVICE = 
+                                UserServiceFactory.getUserService();
   protected final static Gson GSON = new Gson();
 
   /** 

@@ -1,8 +1,6 @@
 package com.google.step.servlets;
 
 import com.google.step.servlets.ServletHelper;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
@@ -43,7 +41,7 @@ final class EasyLink {
 public class ManageServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    final String email = USERSERVICE.getCurrentUser().getEmail();
+    final String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
     // Define a query rule that retreives records based on email and 
     // sorts links in alphabetically by shortcut
     Filter emailFilter =
@@ -73,7 +71,4 @@ public class ManageServlet extends HttpServlet {
     Key linkEntityKey = KeyFactory.createKey("Link", id);
     ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
   }
-
-  private static final UserService USERSERVICE =
-      UserServiceFactory.getUserService();
 }
