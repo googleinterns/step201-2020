@@ -20,22 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Define an easylink object. */
-final class EasyLink {
-    
-  public EasyLink(long id, String shortcut, String url, String email) {
-    this.id = id;
-    this.shortcut = shortcut;
-    this.url = url;
-    this.email = email;
-  }
-
-  private final long id;
-  private final String shortcut;
-  private final String url;
-  private final String email;
-}
-
 /** Servlet responsible for managing links. */
 @WebServlet("/data")
 public class ManageServlet extends HttpServlet {
@@ -51,18 +35,8 @@ public class ManageServlet extends HttpServlet {
                       .addSort("shortcut", SortDirection.ASCENDING);
     PreparedQuery results = ServletHelper.DEFAULT_DATASTORE_SERVICE.prepare(query);
 
-    // Retrieve all links from datastore
-    List<EasyLink> links = new ArrayList<>();
-    for (final Entity entity : results.asIterable()) {
-      EasyLink link = new EasyLink(entity.getKey().getId(), 
-                                   (String) entity.getProperty("shortcut"),  
-                                   (String) entity.getProperty("url"),
-                                   (String) entity.getProperty("email"));
-      links.add(link);
-    }
-
     response.setContentType("application/json;");
-    response.getWriter().println(ServletHelper.convertToJson(links));
+    response.getWriter().println(ServletHelper.convertToJson(results.asList()));
   }
 
   @Override

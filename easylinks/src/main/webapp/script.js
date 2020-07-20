@@ -32,11 +32,11 @@ function getLinks() {
       if (stats) {
         stats.forEach((link) => {
           // Add a row to the table, which looks like
-          // id, shortcut, url, edit button, deletebutton
+          // id, shortcut, url, edit button, delete button
           var row = tableElement.insertRow();
-          row.insertCell(0).innerHTML = link.id;
-          row.insertCell(1).innerHTML = link.shortcut;
-          row.insertCell(2).innerHTML = createHyperLink(link.url);
+          row.insertCell(0).innerHTML = link.propertyMap.id;
+          row.insertCell(1).innerHTML = link.propertyMap.shortcut;
+          row.insertCell(2).innerHTML = createHyperLink(link.propertyMap.url);
           row.insertCell(3).innerHTMl = "<button>Edit</button>";
           row.insertCell(4).innerHTML = "<button>Delete</button>";
         });
