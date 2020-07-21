@@ -17,30 +17,32 @@
               <!-- id, shortcut, url, edit, delete -->
               <th colspan="5">Links</th>
             </tr>
+            <tr>
+              <th>ID</th>
+              <th>Shorcut</th>
+              <th>URL</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>ID</td>
-              <td>Shorcut</td>
-              <td>URL</td>
-              <td>Edit</td>
-              <td>Delete</td>
-            </tr>
           </tbody>
         </table>
       </div>
-    </div>
-    <div id="edit-form">
-      <form action="/data" method="POST">
-        <h1>Edit</h1>
-        <div id="id"></div>
-        <label for="shortcut"><b>Shortcut</b></label>
-        <input type="text" id="shortcut" name="shortcut" required>
-        <label for="url"><b>URL</b></label>
-        <input type="text" id="url" name="url" required>
-        <button type="submit">Submit</button>
-        <button type="button" onclick="closeForm()">Close</button>
-      </form>
+
+      <div id="edit-form">
+        <form action="/data" method="POST">
+          <h1>Edit</h1>
+          <div id="id"></div>
+          <label for="shortcut"><b>Shortcut</b></label>
+          <input type="text" id="shortcut" name="shortcut" required>
+          <label for="url"><b>URL</b></label>
+          <input type="text" id="url" name="url" required>
+          <button type="submit">Submit</button>
+          <button type="button" onclick="closeForm()">Close</button>
+        </form>
+      </div>
+        
     </div>
   </body>
 </html>
