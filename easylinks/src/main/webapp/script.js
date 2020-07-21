@@ -27,7 +27,7 @@ function getLinks() {
           // Add a row to the table, which looks like
           // id, shortcut, url, edit button, delete button
           var row = tableElement.insertRow();
-          row.insertCell(0).innerHTML = link.propertyMap.id;
+          row.insertCell(0).innerHTML = link.key.id;
           row.insertCell(1).innerHTML = link.propertyMap.shortcut;
           row.insertCell(2).innerHTML = createHyperLink(link.propertyMap.url);
           row.insertCell(3).innerHTML = "<button class=\"edit-button\">Edit</button>";
