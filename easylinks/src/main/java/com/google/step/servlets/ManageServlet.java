@@ -9,6 +9,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,13 +33,46 @@ public class ManageServlet extends HttpServlet {
     PreparedQuery results = ServletHelper.DEFAULT_DATASTORE_SERVICE.prepare(query);
 
     response.setContentType("application/json;");
-    response.getWriter().println(ServletHelper.convertToJson(results.asList()));
+    response.getWriter().println(
+            ServletHelper.GSON.toJson(
+                  results.asList(FetchOptions.Builder.withDefaults())));
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long id = Long.parseLong(request.getParameter("id"));
-    Key linkEntityKey = KeyFactory.createKey("Link", id);
-    ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
+    String action = ServletHelper.getParameterWithDefault(request, "action", "");
+    switch (action)
+    {
+      case "add":
+        addLink(request, response);
+        break;
+      case "delete":
+        long id = Long.parseLong(request.getParameter("id"));
+        Key linkEntityKey = KeyFactory.createKey("Link", id);
+        ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
+        break;
+      default:
+        break;
+    }
   }
+
+  private static void addLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String shortcut = ServletHelper.getParameterWithDefault(request, "shortcut", "");
+    String url = ServletHelper.getParameterWithDefault(request, "url", "");
+    if (shortcut.isEmpty() || url.isEmpty()) {
+      response.getWriter().println("Invalid Input.");
+      return;
+    }
+
+    // Add the mapping to the DataStore
+    Entity easyLinkEntity = new Entity("Link");
+    easyLinkEntity.setProperty("shortcut", shortcut);
+    easyLinkEntity.setProperty("url", url);
+    easyLinkEntity.setProperty("email", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
+
+    ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
+
+  }
+
+  private static final int DEFALUT_LINKS_TO_DISPLAY = 100;
 }
