@@ -27,7 +27,7 @@ function getLinks() {
     .then(response => response.json())
     .then((stats) => {
       var tableElement = document.getElementById('link-container');
-      tableElement.innerHTML = '';
+      tableElement.getElementsByTagName("tbody")[0].innerHTML = '';
 
       if (stats) {
         stats.forEach((link) => {
