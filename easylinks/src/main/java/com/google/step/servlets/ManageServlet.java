@@ -4,6 +4,7 @@ import com.google.step.servlets.ServletHelper;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -33,9 +34,8 @@ public class ManageServlet extends HttpServlet {
     PreparedQuery results = ServletHelper.DEFAULT_DATASTORE_SERVICE.prepare(query);
 
     response.setContentType("application/json;");
-    response.getWriter().println(
-            ServletHelper.GSON.toJson(
-                  results.asList(FetchOptions.Builder.withDefaults())));
+    response.getWriter().println(ServletHelper.convertToJson(
+        results.asList(FetchOptions.Builder.withDefaults())));
   }
 
   @Override
