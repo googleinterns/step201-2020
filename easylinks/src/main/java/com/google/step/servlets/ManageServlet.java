@@ -35,9 +35,12 @@ public class ManageServlet extends HttpServlet {
   }
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long id = Long.parseLong(request.getParameter("id"));
-    Key linkEntityKey = KeyFactory.createKey("Link", id);
-    ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException { 
+    final String action = ServletHelper.getParameterWithDefault(request, "action", "");
+    if (action == "delete"){
+      long id = Long.parseLong(request.getParameter("id"));
+      Key linkEntityKey = KeyFactory.createKey("Link", id);
+      ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
+    }
   }
 }
