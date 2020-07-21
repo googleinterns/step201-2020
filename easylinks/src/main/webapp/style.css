@@ -1,1 +1,8 @@
 /* HTML style-related code for EasyLink project*/
+
+#edit-form {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+}
