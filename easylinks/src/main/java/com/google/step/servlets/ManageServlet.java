@@ -73,6 +73,4 @@ public class ManageServlet extends HttpServlet {
     ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
 
   }
-
-  private static final int DEFALUT_LINKS_TO_DISPLAY = 100;
 }
