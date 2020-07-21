@@ -5,7 +5,7 @@
 function deleteLink(id) {
   const params = new URLSearchParams();
   params.append('id', id);
-  fetch('/delete-link', {method: 'POST', body: params});
+  fetch('/data', {method: 'POST', body: params});
 }
 
 /**
