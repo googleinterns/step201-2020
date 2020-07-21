@@ -65,3 +65,8 @@ $(".edit-button").click(function() {
 function closeForm() {
   document.getElementById("edit-form").style.display = "none";
 }
+
+/** Displays the form for user to add a link */
+function showAddLinkForm() {
+  document.getElementById("add-form").classList.remove('hidden');
+}

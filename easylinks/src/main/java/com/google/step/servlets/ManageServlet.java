@@ -59,7 +59,7 @@ public class ManageServlet extends HttpServlet {
   private static void addLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String shortcut = ServletHelper.getParameterWithDefault(request, "shortcut", "");
     String url = ServletHelper.getParameterWithDefault(request, "url", "");
-    if (shortcut.isEmpty() || url.isEmpty()) {
+    if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
       response.getWriter().println("Invalid Input.");
       return;
     }
@@ -71,6 +71,9 @@ public class ManageServlet extends HttpServlet {
     easyLinkEntity.setProperty("email", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
 
     ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
+    response.sendRedirect("/manage.html");
 
   }
+
+    private static final String PROVIDED_LINK = "~";
 }
