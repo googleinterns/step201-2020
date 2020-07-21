@@ -48,12 +48,14 @@ function createHyperLink(url) {
 /** Allows for link edition when the edit button gets clicked. */
 $(".edit-button").click(function() {
   $("#edit-form").show();
+  var $row = $(this).closest("tr");
   const id = document.getElementById("id");
-  id.innerText = Integer.parseInt($(this).closest("tr").find("td:nth-child(0)").text());
+  id.innerText = Integer.parseInt($row.find("td:nth-child(0)").text());
   const shortcut = document.getElementById("shortcut")
-  shortcut.value = $(this).closest("tr").find("td:nth-child(1)").text();
+  shortcut.value = $row.find("td:nth-child(1)").text();
   const url = document.getElementById("url");
-  url.value = $(this).closest("tr").find("td:nth-child(2)").text();
+  url.value = $row.find("td:nth-child(2)").text();
+  $row.remove();
 });
 
 /** Close the edit form. */
