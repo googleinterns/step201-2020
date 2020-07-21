@@ -29,18 +29,20 @@
           </tbody>
         </table>
       </div>
-    </div>
-    <div id="edit-form">
-      <form action="/data" method="POST">
-        <h1>Edit</h1>
-        <div id="id"></div>
-        <label for="shortcut"><b>Shortcut</b></label>
-        <input type="text" id="shortcut" name="shortcut" required>
-        <label for="url"><b>URL</b></label>
-        <input type="text" id="url" name="url" required>
-        <button type="submit">Submit</button>
-        <button type="button" onclick="closeForm()">Close</button>
-      </form>
+
+      <div id="edit-form">
+        <form action="/data" method="POST">
+          <h1>Edit</h1>
+          <div id="id"></div>
+          <label for="shortcut"><b>Shortcut</b></label>
+          <input type="text" id="shortcut" name="shortcut" required>
+          <label for="url"><b>URL</b></label>
+          <input type="text" id="url" name="url" required>
+          <button type="submit">Submit</button>
+          <button type="button" onclick="closeForm()">Close</button>
+        </form>
+      </div>
+        
     </div>
   </body>
 </html>
