@@ -1,5 +1,9 @@
 /* HTML style-related code for EasyLink project*/
 
+.hidden {
+  display: none;
+}
+
 #edit-form {
   display: none;
   position: fixed;

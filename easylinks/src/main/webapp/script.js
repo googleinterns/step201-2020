@@ -63,6 +63,11 @@ function closeForm() {
   document.getElementById("edit-form").style.display = "none";
 }
 
+/** Displays the form for user to add a link */
+function showAddLinkForm() {
+  document.getElementById("add-form").classList.remove('hidden');
+}
+
 /** Tells the server to delete the link. */
 $(".delete-button").click(function() {
   const params = new URLSearchParams();
@@ -70,3 +75,4 @@ $(".delete-button").click(function() {
   params.append('action', 'delete');
   fetch('/data', {method: 'POST', body: params});
 });
+

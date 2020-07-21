@@ -11,6 +11,7 @@
     <div id="content">
       <h1>Manage your EasyLinks</h1>
       <div id="table-container">
+        <button onclick="showAddLinkForm()">Add EasyLink</button>
         <table id="link-container">
           <thead>
             <tr>
@@ -29,6 +30,17 @@
           </tbody>
         </table>
       </div>
+    </div>
+    <div id="add-form" class="hidden">
+      <form action="/data?action=add" method="POST">
+        <h2>Add Link</h2>
+        <hr/>
+        <label for="shortcut">Shortcut:</label><br>
+        <input type="text" name="shortcut" required><br>
+        <label for="url">URL:</label><br>
+        <input type="url" name="url" required><br><br>
+        <input type="submit" value="submit">
+      </form>
     </div>
     <div id="edit-form">
       <form action="/data?action=edit" method="POST">
