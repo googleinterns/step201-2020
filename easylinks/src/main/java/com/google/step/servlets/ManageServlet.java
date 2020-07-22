@@ -1,6 +1,8 @@
 package com.google.step.servlets;
 
 import com.google.step.servlets.ServletHelper;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -84,22 +86,21 @@ public class ManageServlet extends HttpServlet {
       return;
     }
 
-    deleteLinkWithId(id);
-    Entity easyLinkEntity = new Entity("Link");
-    easyLinkEntity.setProperty("shortcut", shortcut);
-    easyLinkEntity.setProperty("url", url);
-    easyLinkEntity.setProperty("email", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
-
-    ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
+    try {
+      // Overwrite existing entity property
+      Key linkEntityKey = KeyFactory.createKey("Link", id);
+      Entity easyLinkEntity = ServletHelper.DEFAULT_DATASTORE_SERVICE.get(linkEntityKey);
+      easyLinkEntity.setProperty("shortcut", shortcut);
+      easyLinkEntity.setProperty("url", url);
+      ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
+    } catch(Exception e) {
+      response.getWriter().println("Invalid ID.");
+    }
     response.sendRedirect("/manage.html");
   }
 
   private static void deleteLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
     long id = Long.parseLong(request.getParameter("id"));
-    deleteLinkWithId(id);
-  }
-
-  private static void deleteLinkWithId(long id) {
     Key linkEntityKey = KeyFactory.createKey("Link", id);
     ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
   }
