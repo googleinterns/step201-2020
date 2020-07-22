@@ -57,6 +57,7 @@ public class ManageServlet extends HttpServlet {
   }
 
   private static void addLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Check the input strings are valid
     String shortcut = ServletHelper.getParameterWithDefault(request, "shortcut", "");
     String url = ServletHelper.getParameterWithDefault(request, "url", "");
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
@@ -64,11 +65,19 @@ public class ManageServlet extends HttpServlet {
       return;
     }
 
+    // Check if the shortcut already created in the DataStore
+    String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
+    if (ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null) {
+      // The shorcut is already exists
+      response.getWriter().println("Repeated shortcut.");
+      return;
+    }
+
     // Add the mapping to the DataStore
     Entity easyLinkEntity = new Entity("Link");
     easyLinkEntity.setProperty("shortcut", shortcut);
     easyLinkEntity.setProperty("url", url);
-    easyLinkEntity.setProperty("email", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
+    easyLinkEntity.setProperty("email", email);
 
     ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
     response.sendRedirect("/manage.html");
