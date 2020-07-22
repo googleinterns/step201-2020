@@ -13,7 +13,7 @@ function userAuth() {
   });
 }
 
-/** Displays links after user is logged in */
+/** Displays links */
 function getLinks() {
   userAuth();
   fetch(`/data`)
@@ -70,4 +70,9 @@ function deleteLink(btn) {
   params.append('action', 'delete');
   fetch('/data', {method: 'POST', body: params});
   $(btn).closest('tr').remove();
+}
+
+function redirectToManagePage() {
+  userAuth();
+  window.location.href= 'manage.html';
 }

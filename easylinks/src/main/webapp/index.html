@@ -7,18 +7,21 @@
     <script src="script.js"></script>
   </head>
   <body>
-    <div id="content">
-      <h1>Hello World!</h1>
-    </div>
-    <div>
-      <h2>EasyLink!</h2>
-      <form action="/easy-link" method="POST">
-        <input type="text" alt="links" name="easy-link">
-        <input type="submit" value="submit">
-        <hr/>
-      </form>
-      <button onclick="location.href='manage.html'" type="button">
-        Manage Your link </button>
+    <div class="content">
+
+      <div class="search">
+        <h1>EasyLinks</h1>
+        <form action="/easy-link" method="POST">
+          <div class="searchbar">
+            <input type="text" class="searchTerm" alt="links" name="easy-link"
+                placeholder="Type EasyLink here and Search">
+            <input type="submit" value="GO">
+          </div>
+        </form> 
+      </div>
+      
+      <button class="manageButton" onclick="redirectToManagePage()" type="button">
+        Manage Links </button>
     </div>
   </body>
 </html>
