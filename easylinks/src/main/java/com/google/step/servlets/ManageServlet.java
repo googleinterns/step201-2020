@@ -47,9 +47,10 @@ public class ManageServlet extends HttpServlet {
         addLink(request, response);
         break;
       case "delete":
-        long id = Long.parseLong(request.getParameter("id"));
-        Key linkEntityKey = KeyFactory.createKey("Link", id);
-        ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
+        deleteLink(request, response);
+        break;
+      case "edit":
+        editLink(request, response);
         break;
       default:
         break;
@@ -72,7 +73,35 @@ public class ManageServlet extends HttpServlet {
 
     ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
     response.sendRedirect("/manage.html");
+  }
 
+  private static void editLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    long id = Long.parseLong(request.getParameter("ed-id"));
+    String shortcut = ServletHelper.getParameterWithDefault(request, "ed-shortcut", "");
+    String url = ServletHelper.getParameterWithDefault(request, "ed-url", "");
+    if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
+      response.getWriter().println("Invalid Input.");
+      return;
+    }
+
+    deleteLinkWithId(id);
+    Entity easyLinkEntity = new Entity("Link");
+    easyLinkEntity.setProperty("shortcut", shortcut);
+    easyLinkEntity.setProperty("url", url);
+    easyLinkEntity.setProperty("email", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
+
+    ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
+    response.sendRedirect("/manage.html");
+  }
+
+  private static void deleteLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    long id = Long.parseLong(request.getParameter("id"));
+    deleteLinkWithId(id);
+  }
+
+  private static void deleteLinkWithId(long id) {
+    Key linkEntityKey = KeyFactory.createKey("Link", id);
+    ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
   }
 
     private static final String PROVIDED_LINK = "~";
