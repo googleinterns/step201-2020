@@ -47,7 +47,7 @@ public final class ServletHelper {
    * @return the URL if the shortcut and email are found in the DataStore
    *         the defaultValue otherwise
    */
-  protected static String fetchUrlWithDefault(String shortcut, String email, String defalutValue) {
+  protected static String fetchUrlWithDefault(String shortcut, String email, String defaultValue) {
     // Create the filter and search for the matched entity
     Query query = new Query("Link").setFilter(
                     CompositeFilterOperator.and(
@@ -56,7 +56,7 @@ public final class ServletHelper {
     Entity easyLinkEntity = DEFAULT_DATASTORE_SERVICE.prepare(query).asSingleEntity();
 
     if (easyLinkEntity == null) {
-      return defalutValue;
+      return defaultValue;
     }
     return (String) easyLinkEntity.getProperty("url");
   }
