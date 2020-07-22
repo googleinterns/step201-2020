@@ -23,7 +23,10 @@ public class EasyLinkServlet extends HttpServlet {
     } else if (easyLink.startsWith(PROVIDED_LINK)) {
       // TODO: Search the people
     } else {
-      // TODO: Process the customized link
+      // Process the cutomized link and redirect
+      String url = ServletHelper.fetchUrlWithDefault(
+                    easyLink, ServletHelper.USERSERVICE.getCurrentUser().getEmail(), HOME_PAGE);
+      response.sendRedirect(url);
     }
     
   }

@@ -2,6 +2,11 @@ package com.google.step.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gson.Gson;
@@ -35,6 +40,25 @@ public final class ServletHelper {
    */
   protected static final <T> String convertToJson(List<T> messages) {
     return GSON.toJson(messages);
+  }
+
+  /**
+   * Fetches the url that matches the shortcut and the email
+   * @return the URL if the shortcut and email are found in the DataStore
+   *         the defaultValue otherwise
+   */
+  protected static String fetchUrlWithDefault(String shortcut, String email, String defaultValue) {
+    // Create the filter and search for the matched entity
+    Query query = new Query("Link").setFilter(
+                    CompositeFilterOperator.and(
+                        new FilterPredicate("email", FilterOperator.EQUAL, email),
+                        new FilterPredicate("shortcut", FilterOperator.EQUAL, shortcut)));
+    Entity easyLinkEntity = DEFAULT_DATASTORE_SERVICE.prepare(query).asSingleEntity();
+
+    if (easyLinkEntity == null) {
+      return defaultValue;
+    }
+    return (String) easyLinkEntity.getProperty("url");
   }
 
   /** Disables the default constructor */
