@@ -13,9 +13,8 @@ function userAuth() {
   });
 }
 
-/** Displays links after user is logged in */
+/** Displays links */
 function getLinks() {
-  userAuth();
   fetch(`/data`)
     .then(response => response.json())
     .then((stats) => {
@@ -77,5 +76,6 @@ $(".delete-button").click(function() {
 });
 
 function redirectToManagePage() {
+  userAuth();
   window.location.href= 'manage.html';
 }
