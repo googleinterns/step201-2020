@@ -15,6 +15,7 @@ function userAuth() {
 
 /** Displays links */
 function getLinks() {
+  userAuth();
   fetch(`/data`)
     .then(response => response.json())
     .then((stats) => {
