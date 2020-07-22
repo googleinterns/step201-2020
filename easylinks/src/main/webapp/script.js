@@ -30,8 +30,8 @@ function getLinks() {
           row.insertCell(0).innerHTML = link.key.id;
           row.insertCell(1).innerHTML = link.propertyMap.shortcut;
           row.insertCell(2).innerHTML = createHyperLink(link.propertyMap.url);
-          row.insertCell(3).innerHTML = "<button class=\"edit-button\">Edit</button>";
-          row.insertCell(4).innerHTML = "<button class=\"delete-button\">Delete</button>";
+          row.insertCell(3).innerHTML = "<button onclick=\"editLink(this)\">Edit</button>";
+          row.insertCell(4).innerHTML = "<button onclick=\"deleteLink(this)\">Delete</button>";
         });
       }
   });
@@ -46,17 +46,12 @@ function createHyperLink(url) {
 }
 
 /** Allows for link edition when the edit button gets clicked. */
-$(".edit-button").click(function() {
-  $("#edit-form").show();
-  var $row = $(this).closest("tr");
-  const id = document.getElementById("id");
-  id.innerText = Integer.parseInt($row.find("td:nth-child(0)").text());
-  const shortcut = document.getElementById("shortcut")
-  shortcut.value = $row.find("td:nth-child(1)").text();
-  const url = document.getElementById("url");
-  url.value = $row.find("td:nth-child(2)").text();
-  $row.remove();
-});
+function editLink(btn) {
+  $("#edit-form").show();
+  $("#ed-id").val($(btn).closest("tr").find("td:eq(0)").html());
+  $("#ed-shortcut").val($(btn).closest("tr").find("td:eq(1)").html());
+  $("#ed-url").val($(btn).closest("tr").find("td:eq(2)").html());
+}
 
 /** Close the edit form. */
 function closeForm() {
@@ -69,10 +64,10 @@ function showAddLinkForm() {
 }
 
 /** Tells the server to delete the link. */
-$(".delete-button").click(function() {
+function deleteLink(btn) {
   const params = new URLSearchParams();
-  params.append('id', Integer.parseInt($(this).closest("tr").find("td:nth-child(0)").text()));
+  params.append('id', $(btn).closest("tr").find("td:first").text());
   params.append('action', 'delete');
   fetch('/data', {method: 'POST', body: params});
-});
-
+  $(btn).closest('tr').remove();
+}

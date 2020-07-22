@@ -42,16 +42,17 @@
         <input type="submit" value="submit">
       </form>
     </div>
-    <div id="edit-form">
+    <div id="edit-form" class="hidden">
       <form action="/data?action=edit" method="POST">
-        <h1>Edit</h1>
-        <div id="id"></div>
-        <label for="shortcut"><b>Shortcut</b></label>
-        <input type="text" id="shortcut" name="shortcut" required>
-        <label for="url"><b>URL</b></label>
-        <input type="text" id="url" name="url" required>
-        <button type="submit">Submit</button>
-        <button type="button" onclick="closeForm()">Close</button>
+        <h2>Edit Link</h2>
+        <label for="ed-id"><b>ID</b></label>
+        <input type="text" id="ed-id" name="ed-id" readonly>
+        <label for="ed-shortcut"><b>Shortcut</b></label>
+        <input type="text" id="ed-shortcut" name="ed-shortcut" required>
+        <label for="ed-url"><b>URL</b></label>
+        <input type="text" id="ed-url" name="ed-url" required>
+        <input type="submit" value="submit">
+        <button type="button" onclick="closeForm()">close</button>
       </form>
     </div>
   </body>
