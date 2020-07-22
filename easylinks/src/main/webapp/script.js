@@ -76,3 +76,6 @@ $(".delete-button").click(function() {
   fetch('/data', {method: 'POST', body: params});
 });
 
+function redirectToManagePage() {
+  window.location.href= 'manage.html';
+}
