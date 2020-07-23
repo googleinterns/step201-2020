@@ -7,33 +7,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet responses to redirect the easy link to another website*/
-@WebServlet("/easy-link")
+@WebServlet("/*")
 public class EasyLinkServlet extends HttpServlet {
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String easyLink = ServletHelper.getParameterWithDefault(request, "easy-link", "");
-
-    if (easyLink.isEmpty()) {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String requestUrl = request.getRequestURI();
+    if (requestUrl.isEmpty()) {
+      // Invalid input url, redirect to the home page
       response.sendRedirect(HOME_PAGE);
-    } else if (easyLink.startsWith(NAVIGATION_LINK)) {
-      // TODO: Search the datastore to find the link
-    } else if (easyLink.startsWith(PEOPLE_SEARCH_LINK)) {
-      // TODO: Navigate
-    } else if (easyLink.startsWith(PROVIDED_LINK)) {
-      // TODO: Search the people
-    } else {
-      // Process the cutomized link and redirect
-      String url = ServletHelper.fetchUrlWithDefault(
-                    easyLink, ServletHelper.USERSERVICE.getCurrentUser().getEmail(), HOME_PAGE);
-      response.sendRedirect(url);
+      return;
     }
     
+    String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
+                            ServletHelper.USERSERVICE.getCurrentUser().getEmail(), HOME_PAGE);
+    response.sendRedirect(responseUrl);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Redirect to the corresponding servlet
+    String shortcut = ServletHelper.getParameterWithDefault(request, "easy-link", HOME_PAGE);
+    response.sendRedirect(shortcut);
   }
 
   /** Private constants for different types of link */
-  private static final String PROVIDED_LINK = "~";
-  private static final String NAVIGATION_LINK = "~where";
-  private static final String PEOPLE_SEARCH_LINK = "~who";
   private static final String HOME_PAGE = "/index.html";
 }
