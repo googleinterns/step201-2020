@@ -8,16 +8,12 @@
     <script src="script.js"></script>
   </head>
   <body onload="getLinks()">
-    <div id="content">
-      <h1>Manage your EasyLinks</h1>
-      <div id="table-container">
+    <div class="content">
+      <h1 class="center">Manage your EasyLinks</h1>
+      <div class="table-container">
         <button onclick="showAddLinkForm()">Add EasyLink</button>
         <table id="link-container">
           <thead>
-            <tr>
-              <!-- id, shortcut, url, edit, delete -->
-              <th colspan="5">Links</th>
-            </tr>
             <tr>
               <th>ID</th>
               <th>Shorcut</th>
@@ -33,26 +29,25 @@
     </div>
     <div id="add-form" class="hidden">
       <form action="/data?action=add" method="POST">
-        <h2>Add Link</h2>
-        <hr/>
         <label for="shortcut">Shortcut:</label><br>
         <input type="text" name="shortcut" required><br>
         <label for="url">URL:</label><br>
         <input type="url" name="url" required><br><br>
-        <input type="submit" value="submit">
+        <button type="submit">Add</button>
+        <button type="button" onclick="closeAddForm()">close</button>
       </form>
     </div>
+
     <div id="edit-form" class="hidden">
       <form action="/data?action=edit" method="POST">
-        <h2>Edit Link</h2>
         <label for="ed-id"><b>ID</b></label>
         <input type="text" id="ed-id" name="ed-id" readonly>
         <label for="ed-shortcut"><b>Shortcut</b></label>
         <input type="text" id="ed-shortcut" name="ed-shortcut" required>
         <label for="ed-url"><b>URL</b></label>
         <input type="text" id="ed-url" name="ed-url" required>
-        <input type="submit" value="submit">
-        <button type="button" onclick="closeForm()">close</button>
+        <button type="submit">Edit</button>
+        <button type="button" onclick="closeEditForm()">close</button>
       </form>
     </div>
   </body>
