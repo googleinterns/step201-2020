@@ -19,9 +19,13 @@ public class EasyLinkServlet extends HttpServlet {
       return;
     }
     
-    String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
-                            ServletHelper.USERSERVICE.getCurrentUser().getEmail(), HOME_PAGE);
-    response.sendRedirect(responseUrl);
+    if (ServletHelper.USERSERVICE.isUserLoggedIn()) {
+      String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
+                              ServletHelper.USERSERVICE.getCurrentUser().getEmail(), HOME_PAGE);
+      response.sendRedirect(responseUrl);
+    } else {
+      response.sendRedirect(ServletHelper.USERSERVICE.createLoginURL("/index.html"));
+    }
   }
 
   @Override
