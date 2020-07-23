@@ -8,6 +8,8 @@
     <script src="script.js"></script>
   </head>
   <body onload="getLinks()">
+    <button onclick="redirectToHomePage()" type="button" class="redirectButton">
+      Back</button>
     <div class="content">
       <h1 class="center">Manage your EasyLinks</h1>
       <div class="table-container">
@@ -29,9 +31,9 @@
     </div>
     <div id="add-form" class="hidden">
       <form action="/data?action=add" method="POST">
-        <label for="shortcut">Shortcut:</label><br>
+        <label for="shortcut"><b>Shortcut</b></label><br>
         <input type="text" name="shortcut" required><br>
-        <label for="url">URL:</label><br>
+        <label for="url"><b>URL</b></label><br>
         <input type="url" name="url" required><br><br>
         <button type="submit">Add</button>
         <button type="button" onclick="closeAddForm()">close</button>
@@ -40,12 +42,12 @@
 
     <div id="edit-form" class="hidden">
       <form action="/data?action=edit" method="POST">
-        <label for="ed-id"><b>ID</b></label>
-        <input type="text" id="ed-id" name="ed-id" readonly>
-        <label for="ed-shortcut"><b>Shortcut</b></label>
-        <input type="text" id="ed-shortcut" name="ed-shortcut" required>
-        <label for="ed-url"><b>URL</b></label>
-        <input type="text" id="ed-url" name="ed-url" required>
+        <label for="ed-id"><b>ID</b></label><br>
+        <input type="text" id="ed-id" name="ed-id" readonly><br>
+        <label for="ed-shortcut"><b>Shortcut</b></label><br>
+        <input type="text" id="ed-shortcut" name="ed-shortcut" required><br>
+        <label for="ed-url"><b>URL</b></label><br>
+        <input type="text" id="ed-url" name="ed-url" required><br><br>
         <button type="submit">Edit</button>
         <button type="button" onclick="closeEditForm()">close</button>
       </form>
