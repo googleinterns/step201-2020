@@ -81,5 +81,9 @@ function deleteLink(btn) {
 
 function redirectToManagePage() {
   userAuth();
-  window.location.href= 'manage.html';
+  window.location.href = '/manage.html';
+}
+
+function redirectToHomePage() {
+  window.location.href = '/index.html';
 }
