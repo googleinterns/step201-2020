@@ -47,6 +47,7 @@ function createHyperLink(url) {
 
 /** Allows for link edition when the edit button gets clicked. */
 function editLink(btn) {
+  closeAddForm();
   $("#edit-form").show();
   $("#ed-id").val($(btn).closest("tr").find("td:eq(0)").html());
   $("#ed-shortcut").val($(btn).closest("tr").find("td:eq(1)").html());
@@ -65,6 +66,7 @@ function closeAddForm() {
 
 /** Displays the form for user to add a link */
 function showAddLinkForm() {
+  closeEditForm();
   document.getElementById("add-form").classList.remove('hidden');
 }
 
