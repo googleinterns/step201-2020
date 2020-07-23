@@ -54,8 +54,13 @@ function editLink(btn) {
 }
 
 /** Close the edit form. */
-function closeForm() {
+function closeEditForm() {
   document.getElementById("edit-form").style.display = "none";
+}
+
+/** Close the add form. */
+function closeAddForm() {
+  document.getElementById("add-form").classList.add('hidden');
 }
 
 /** Displays the form for user to add a link */
