@@ -19,12 +19,12 @@ public class EasyLinkServlet extends HttpServlet {
       return;
     }
     
-    if (ServletHelper.USERSERVICE.isUserLoggedIn()) {
+    if (requestUrl.charAt(1) == '~' || ServletHelper.USERSERVICE.isUserLoggedIn()) {
       String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
                               ServletHelper.USERSERVICE.getCurrentUser().getEmail(), HOME_PAGE);
       response.sendRedirect(responseUrl);
     } else {
-      response.sendRedirect(ServletHelper.USERSERVICE.createLoginURL("/index.html"));
+      response.sendRedirect(ServletHelper.USERSERVICE.createLoginURL(HOME_PAGE));
     }
   }
 
