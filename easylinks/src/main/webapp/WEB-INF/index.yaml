@@ -1,0 +1,9 @@
+indexes:
+
+- kind: Link
+  ancestor: no
+  properties:
+  - name: email
+    direction: asc
+  - name: shortcut
+    direction: asc
