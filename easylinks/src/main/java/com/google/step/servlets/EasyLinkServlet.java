@@ -21,7 +21,8 @@ public class EasyLinkServlet extends HttpServlet {
     
     if (requestUrl.charAt(1) == '~' || ServletHelper.USERSERVICE.isUserLoggedIn()) {
       String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
-                              ServletHelper.USERSERVICE.getCurrentUser().getEmail(), HOME_PAGE);
+          requestUrl.charAt(1) == '~' ? "" : ServletHelper.USERSERVICE.getCurrentUser().getEmail(),
+          HOME_PAGE);
       response.sendRedirect(responseUrl);
     } else {
       response.sendRedirect(ServletHelper.USERSERVICE.createLoginURL(HOME_PAGE));
