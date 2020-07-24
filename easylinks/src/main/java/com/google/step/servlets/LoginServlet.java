@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/login")
+@WebServlet("/~login")
 public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, 
