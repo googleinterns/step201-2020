@@ -6,7 +6,7 @@
  * Redirects to login page if user is not logged in
  */
 function userAuth() {
-  fetch('/login').then(response => response.text()).then(stats => {
+  fetch('/~login').then(response => response.text()).then(stats => {
     if (stats.trim() !== "okay-columbia" && stats.trim() !== "okay") {
       window.location.href = stats;
     }
@@ -16,7 +16,7 @@ function userAuth() {
 /** Displays links */
 function getLinks() {
   userAuth();
-  fetch(`/data`)
+  fetch(`/~manage`)
     .then(response => response.json())
     .then((stats) => {
       var tableElement = document.getElementById('link-container');
@@ -75,7 +75,7 @@ function deleteLink(btn) {
   const params = new URLSearchParams();
   params.append('id', $(btn).closest("tr").find("td:first").text());
   params.append('action', 'delete');
-  fetch('/data', {method: 'POST', body: params});
+  fetch('/~manage', {method: 'POST', body: params});
   $(btn).closest('tr').remove();
 }
 

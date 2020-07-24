@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet responses to redirect the easy link to another website*/
 @WebServlet("/*")
-public class EasyLinkServlet extends HttpServlet {
+public class RedirectionServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -19,7 +19,8 @@ public class EasyLinkServlet extends HttpServlet {
       return;
     }
     
-    if (requestUrl.charAt(1) == '~' || ServletHelper.USERSERVICE.isUserLoggedIn()) {
+    // Customized Link Redirection
+    if (ServletHelper.USERSERVICE.isUserLoggedIn()) {
       String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
           requestUrl.charAt(1) == '~' ? "" : ServletHelper.USERSERVICE.getCurrentUser().getEmail(),
           HOME_PAGE);
