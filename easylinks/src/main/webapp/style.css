@@ -100,3 +100,10 @@ button:hover {
   background-color: #056EB4;
   color: white;
 }
+
+#authorizeButton, #signoutButton {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
