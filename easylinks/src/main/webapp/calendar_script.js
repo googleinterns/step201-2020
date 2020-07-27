@@ -115,7 +115,7 @@ function addHangoutButton(hangoutLink) {
   buttonElement.id = "hangoutButton";
   buttonElement.onclick = function() {window.location.href = hangoutLink};
   buttonElement.innerText = "Hangout Link";
-  content.appendChild(buttonElement);
+  div.appendChild(buttonElement);
 }
 
 function addText(message) {
@@ -123,4 +123,14 @@ function addText(message) {
   div.innerHTML = '';
   var textContent = document.createTextNode(message);
   div.appendChild(textContent);
+}
+
+function initMap() {
+  const directionsService = new google.maps.DirectionsService();
+  const directionsRenderer = new google.maps.DirectionsRenderer();
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 18,
+    center: { lat: 40.807587, lng: -73.961938 }
+  });
+  directionsRenderer.setMap(map);
 }
