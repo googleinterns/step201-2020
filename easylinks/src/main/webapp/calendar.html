@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Next Event</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <button id="authorizeButton">Authorize Calendar API</button>
+    <button id="signoutButton">Sign Out</button>
+
+    <div id="overview"></div>
+    <div id="content">
+      <div id ="map"></div>
+      <div id="hangout"></div>
+      <div id="setoff"></div>
+    </div>
+
+    <script src="calendar_script.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
+</html>
