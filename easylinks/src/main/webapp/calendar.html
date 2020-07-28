@@ -6,7 +6,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIDJtZ0o2uuCQrIVOjB-aJGfnxyzSIlmE"></script>
     <link rel="stylesheet" href="style.css">
   </head>
-  <body onload=initMap()>
+  <body>
     <button id="authorizeButton">Authorize Calendar API</button>
     <button id="signoutButton">Sign Out</button>
 
@@ -16,7 +16,7 @@
     <div id="setoff"></div>
     
     <script src="calendar_script.js"></script>
-    <script src="https://apis.google.com/js/api.js"
+    <script async src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
