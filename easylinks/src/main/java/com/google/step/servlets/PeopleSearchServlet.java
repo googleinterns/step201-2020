@@ -1,4 +1,4 @@
-/*package com.google.step.servlets;
+package com.google.step.servlets;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet responsible for People Search & email sending. */
-/*@WebServlet("/~who/*")
+@WebServlet("/~who/*")
 public class PeopleSearchServlet extends HttpServlet {
 
   @Override
@@ -19,4 +19,4 @@ public class PeopleSearchServlet extends HttpServlet {
     }
     response.sendRedirect("/people.html?name=" + requestUrls[2]);
   }
-}*/
+}
