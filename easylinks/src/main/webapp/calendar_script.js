@@ -86,8 +86,7 @@ function listNextEvent() {
 
       var location = event.location;
       if (location) {
-        // TODO: Add Navigation 
-        // addNavigation(location);
+        addNavigation(location);
       }
 
       var hangoutLink = event.hangoutLink;
@@ -125,12 +124,34 @@ function addText(message) {
   div.appendChild(textContent);
 }
 
-function initMap() {
+function addNavigation(location) {
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
+
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 18,
     center: { lat: 40.807587, lng: -73.961938 }
   });
   directionsRenderer.setMap(map);
+
+  directionsService.route(
+    {
+      origin: {
+        // TODO: replace this fixed value with user current location
+        // The value here is put just for ease of testing
+        lat: 40.807587, lng: -73.961938
+      },
+      destination: {
+        query: location
+      },
+      travelMode: google.maps.TravelMode.WALKING
+    },
+    (response, status) => {
+      if (status === "OK") {
+        directionsRenderer.setDirections(response);
+      } else {
+        window.alert("Directions request failed due to " + status);
+      }
+    }
+  );
 }
