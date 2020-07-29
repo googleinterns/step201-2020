@@ -34,14 +34,14 @@ public class NavigateServlet extends HttpServlet {
       return;
     }
     String buildingCode = requestUrls[2].toUpperCase();
-    response.getWriter().println(buildingMap.get(buildingCode));
+    response.sendRedirect(NAVIGATION_PAGE + buildingMap.get(buildingCode));
   }
 
 
 
   private final LinkedHashMap<String, String> buildingMap = new LinkedHashMap<>();
 
-  // The minimum valid length for a navigation URL
   private static final int URL_MIN_LENGTH = 3;
+  private static final String NAVIGATION_PAGE = "/navigation.html?dest=";
 
 }
