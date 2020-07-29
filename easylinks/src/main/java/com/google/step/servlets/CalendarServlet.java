@@ -14,9 +14,4 @@ public class CalendarServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.sendRedirect("/calendar.html");
   }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //TODO: Calculate set off time
-  }
 }

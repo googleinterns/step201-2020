@@ -1,14 +1,19 @@
 // Client ID and API key from the Developer Console
-var CLIENT_ID = '438102825107-e8ielv4ebjlreus56gdbcd3s58qma0ei.apps.googleusercontent.com';
-var API_KEY = 'AIzaSyCIDJtZ0o2uuCQrIVOjB-aJGfnxyzSIlmE';
+const CLIENT_ID = '438102825107-e8ielv4ebjlreus56gdbcd3s58qma0ei.apps.googleusercontent.com';
+const API_KEY = 'AIzaSyCIDJtZ0o2uuCQrIVOjB-aJGfnxyzSIlmE';
 
-var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 
 // Authorization scopes required by the API
-var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
-var authorizeButton = document.getElementById('authorizeButton');
-var signoutButton = document.getElementById('signoutButton');
+const authorizeButton = document.getElementById('authorizeButton');
+const signoutButton = document.getElementById('signoutButton');
+
+const ZOOM_LEVEL = 18;
+const ORIGIN = new google.maps.LatLng(40.807587, -73.961938);
+const DEFAULT_TRAVEL_MODE = 'WALKING';
+const MS_PER_SECOND = 1000;
 
 /**
  *  Loads the auth2 library and API client library.
@@ -85,24 +90,23 @@ function listNextEvent() {
       var event = events[0];
 
       var location = event.location;
-      if (location) {
-        addNavigation(location);
-      }
+      (location) ? addNavigation(location) : location = "";
 
       var hangoutLink = event.hangoutLink;
-      if (hangoutLink) {
-        addHangoutButton(hangoutLink);
-      }
+      (hangoutLink) ? addHangoutButton(hangoutLink) : hangoutLink = "";
 
       var when = event.start.dateTime;
       if (when) {
-        // TODO: Calculate Set off time using Directions API
-        // getSetOffTime(when, destination);
+        when = new Date(when);
+        if (location) getSetOffTime(when, location);
+      } else {
+        when = "";
       }
-      addText('Next Event: ' + event.summary + ' (' + when + ')' + 
-          ' (' + location + ')');
+
+      addText("overview", "Next Event: " + event.summary + " (" + 
+          when + ")" + " (" + location + ")");
     } else {
-      addText('No upcoming events found.');
+      addText("overview", "No upcoming events found.");
     }
   });
 }
@@ -117,8 +121,8 @@ function addHangoutButton(hangoutLink) {
   div.appendChild(buttonElement);
 }
 
-function addText(message) {
-  var div = document.getElementById('overview');
+function addText(id, message) {
+  var div = document.getElementById(id);
   div.innerHTML = '';
   var textContent = document.createTextNode(message);
   div.appendChild(textContent);
@@ -129,8 +133,8 @@ function addNavigation(location) {
   const directionsRenderer = new google.maps.DirectionsRenderer();
 
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 18,
-    center: { lat: 40.807587, lng: -73.961938 }
+    zoom: ZOOM_LEVEL,
+    center: ORIGIN
   });
   directionsRenderer.setMap(map);
 
@@ -139,12 +143,12 @@ function addNavigation(location) {
       origin: {
         // TODO: replace this fixed value with user current location
         // The value here is put just for ease of testing
-        lat: 40.807587, lng: -73.961938
+        lat: ORIGIN.lat(), lng: ORIGIN.lng()
       },
       destination: {
         query: location
       },
-      travelMode: google.maps.TravelMode.WALKING
+      travelMode: DEFAULT_TRAVEL_MODE
     },
     (response, status) => {
       if (status === "OK") {
@@ -154,4 +158,35 @@ function addNavigation(location) {
       }
     }
   );
+}
+
+function getSetOffTime(when, location) {
+  const service = new google.maps.DistanceMatrixService();
+  const matrixOptions = {
+    origins: [ORIGIN],
+    destinations: [location],
+    travelMode: DEFAULT_TRAVEL_MODE,
+    unitSystem: google.maps.UnitSystem.METRIC,
+  };
+  // Call Distance Matrix service
+  service.getDistanceMatrix(matrixOptions, callback);
+
+  // Callback function used to process Distance Matrix response
+  function callback(response, status) {
+    if (status !== "OK") {
+      alert("Error with distance matrix");
+      return;
+    }
+    
+    // We input one origin and one destination, so there will be only one 
+    // result returned 
+    var result = response.rows[0].elements;
+    addText("duration", "It takes about " + result[0].duration.text + 
+        " to get to the destination");
+
+    // Calculate the set off time
+    var setoffDate = new Date(when - result[0].duration.value * MS_PER_SECOND);
+    addText("setoff", "We recommend you to set off before " + setoffDate.getHours() + 
+        ":" + setoffDate.getMinutes());
+  }
 }
