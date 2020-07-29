@@ -3,15 +3,19 @@
 
 // Stores the configurations of the map
 const config = {
-  URL_CUT_LENGTH: 6, ZOOM_LEVEL: 16, 
+  URL_CUT_LENGTH: 6, 
+  ZOOM_LEVEL: 16, 
   MAP_CENTER: {lat: 40.8075355, lng: -73.9625727}, 
-  SEARCH_RADIUS: 5000
+  SEARCH_RADIUS: 5000,
+  TEST_LOCATION: {lat: 40.807587, lng: -73.961938}
 }
 let map;
+let markers;
 
 /** Initializes the map and sets the center to the Columbia University */
 function initMap() {
   // Initialize the map
+  markers = [];
   map = new google.maps.Map(document.getElementById("map"), {
     center: config.MAP_CENTER,
     zoom: config.ZOOM_LEVEL
@@ -47,12 +51,16 @@ function addMarker(place) {
     map: map,
     title: place.name
   });
+  markers.push(marker);
 
   // Set the diplay information of the marker
   const infowindow = new google.maps.InfoWindow({
     content: `<p><b>${place.name}</b></p>` +
-              `<p>location:${place.geometry.location}</p>` +
-              `<button onclick="showDirections()">Directions</button>`
+             `<p>location:${place.geometry.location}</p>` +
+             `<button onclick="showDirections(
+               ${place.geometry.location.lat()}, 
+               ${place.geometry.location.lng()})">
+               Directions</button>`
   });
   infowindow.open(map, marker);
 
@@ -62,8 +70,23 @@ function addMarker(place) {
 }
 
 /** Navigates from the user's current position to the destination */
-function showDirections() {
-  console.log("Not implemented");
+function showDirections(destLat, destLng) {
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRenderer = new google.maps.DirectionsRenderer();
+  var routeRequest = {
+      origin:config.TEST_LOCATION,
+      destination: new google.maps.LatLng(destLat, destLng),
+      travelMode: 'WALKING' 
+  };
+
+  // Navigate to the destionation
+  markers.forEach(marker => marker.setMap(null));
+  directionsRenderer.setMap(map);
+  directionsService.route(routeRequest, (response, status) => {
+    status === "OK" ?
+    directionsRenderer.setDirections(response) :
+    window.alert("Directions request failed due to " + status);
+  });
 }
 
 /** Handles the location error when getting the user's current location */
