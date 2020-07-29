@@ -103,8 +103,9 @@ function listNextEvent() {
         when = "";
       }
 
-      addText("overview", "Next Event: " + event.summary + " (" + 
-          when + ")" + " (" + location + ")");
+      addText("overview", "<b>Next Event: </b>" + event.summary + "<br>" + 
+                          "<b>Start time: </b>" + when + "<br>" +
+                          "<b>Location: </b>" + location);
     } else {
       addText("overview", "No upcoming events found.");
     }
@@ -119,13 +120,6 @@ function addHangoutButton(hangoutLink) {
   buttonElement.onclick = function() {window.location.href = hangoutLink};
   buttonElement.innerText = "Hangout Link";
   div.appendChild(buttonElement);
-}
-
-function addText(id, message) {
-  var div = document.getElementById(id);
-  div.innerHTML = '';
-  var textContent = document.createTextNode(message);
-  div.appendChild(textContent);
 }
 
 function addNavigation(location) {
@@ -181,12 +175,17 @@ function getSetOffTime(when, location) {
     // We input one origin and one destination, so there will be only one 
     // result returned 
     var result = response.rows[0].elements;
-    addText("duration", "It takes about " + result[0].duration.text + 
-        " to get to the destination");
+    addText("duration", "It takes about " + "<b>" + result[0].duration.text + 
+        "</b>" + " to get to the destination");
 
     // Calculate the set off time
     var setoffDate = new Date(when - result[0].duration.value * MS_PER_SECOND);
-    addText("setoff", "We recommend you to set off before " + setoffDate.getHours() + 
-        ":" + setoffDate.getMinutes());
+    addText("setoff", "We recommend you to set off before " + "<b>"
+        + setoffDate.getHours() + ":" + setoffDate.getMinutes()+ "</b>");
   }
+}
+
+function addText(id, message) {
+  var div = document.getElementById(id);
+  div.innerHTML = message;
 }
