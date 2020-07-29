@@ -155,6 +155,11 @@ function addNavigation(location) {
 }
 
 function getSetOffTime(when, location) {
+  if (when <= new Date()) {
+    addText("setoff", "The event is ongoing!");
+    return;
+  }
+  
   const service = new google.maps.DistanceMatrixService();
   const matrixOptions = {
     origins: [ORIGIN],
