@@ -111,4 +111,9 @@ button:hover {
 #map {
   height: 600px;
   width: 1000px;
+  left: 15%;
+}
+
+#navigationBody {
+  height:100%;
 }
