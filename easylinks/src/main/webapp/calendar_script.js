@@ -11,6 +11,7 @@ const authorizeButton = document.getElementById('authorizeButton');
 const signoutButton = document.getElementById('signoutButton');
 
 const ZOOM_LEVEL = 18;
+const CENTER = new google.maps.LatLng(40.807587, -73.961938);
 const ORIGIN = new google.maps.LatLng(40.807587, -73.961938);
 const DEFAULT_TRAVEL_MODE = 'WALKING';
 const MS_PER_SECOND = 1000;
@@ -90,17 +91,17 @@ function listNextEvent() {
       var event = events[0];
 
       var location = event.location;
-      (location) ? addNavigation(location) : location = "";
+      (location) ? addNavigation(location) : location = "Not specified in calendar";
 
       var hangoutLink = event.hangoutLink;
-      (hangoutLink) ? addHangoutButton(hangoutLink) : hangoutLink = "";
+      if (hangoutLink) addHangoutButton(hangoutLink);
 
       var when = event.start.dateTime;
       if (when) {
         when = new Date(when);
         if (location) getSetOffTime(when, location);
       } else {
-        when = "";
+        when = "Not specified in calendar";
       }
 
       addText("overview", "<b>Next Event: </b>" + event.summary + "<br>" + 
@@ -128,7 +129,7 @@ function addNavigation(location) {
 
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: ZOOM_LEVEL,
-    center: ORIGIN
+    center: CENTER
   });
   directionsRenderer.setMap(map);
 
@@ -139,9 +140,7 @@ function addNavigation(location) {
         // The value here is put just for ease of testing
         lat: ORIGIN.lat(), lng: ORIGIN.lng()
       },
-      destination: {
-        query: location
-      },
+      destination: location,
       travelMode: DEFAULT_TRAVEL_MODE
     },
     (response, status) => {
@@ -154,6 +153,11 @@ function addNavigation(location) {
   );
 }
 
+/**
+ * Queries the Direction Matrix API and retrieves the duration
+ * to get to the next event location from the user's current location. 
+ * If the event is already ongoing, prints a message instead.
+ */
 function getSetOffTime(when, location) {
   if (when <= new Date()) {
     addText("setoff", "The event is ongoing!");
@@ -190,6 +194,7 @@ function getSetOffTime(when, location) {
   }
 }
 
+/** Adds HTML text to a div element as specified by id */
 function addText(id, message) {
   var div = document.getElementById(id);
   div.innerHTML = message;
