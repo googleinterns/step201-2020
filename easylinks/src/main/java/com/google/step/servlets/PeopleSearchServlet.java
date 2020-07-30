@@ -5,6 +5,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.helper.Validate;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 
 /** Servlet responsible for People Search & email sending. */
 @WebServlet("/~who/*")
@@ -13,10 +19,23 @@ public class PeopleSearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String[] requestUrls = request.getRequestURI().split("/");
-    if (requestUrls[2].isEmpty()) {
+    if (requestUrls.length < URL_MIN_LENGTH) {
       response.getWriter().println("Invalid input");
       return;
     }
-    response.sendRedirect("/people.html?name=" + requestUrls[2]);
+    Document doc = Jsoup.connect("https://directory.columbia.edu/people/search?filter.searchTerm=" + requestUrls[2]).get();
+    Elements emails = doc.select("a[class='mailto']");
+    if (emails.size() == 1 ) {
+      response.sendRedirect("mailto:" + emails.first().html());
+    } else {
+      String returnStr = "<h1>Possible Email Addresses</h1>";
+      for (Element email : emails) {
+        returnStr += "<a href=\"mailto:" + email.html() + "\">" + email.html() + "</a><br>";
+      }
+      response.getWriter().println(returnStr);
+    }
   }
+
+  // The minimum valid length for a navigation URL
+  private static final int URL_MIN_LENGTH = 3;
 }
