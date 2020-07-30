@@ -103,9 +103,15 @@ button:hover {
 
 #authorizeButton, #signoutButton {
   display: none;
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: fixed;
+  top: 2%;
+  right: 2%;
+}
+
+#hangoutButton {
+  position: fixed;
+  top: 12%;
+  right: 5%;
 }
 
 #map {
@@ -116,4 +122,8 @@ button:hover {
 
 #navigationBody {
   height:100%;
+}
+
+#page_buttons {
+  text-align: center;
 }
