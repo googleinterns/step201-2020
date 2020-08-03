@@ -103,15 +103,15 @@ button:hover {
 
 #authorizeButton, #signoutButton {
   display: none;
-  position: fixed;
-  top: 2%;
-  right: 2%;
+  position: absolute;
+  top: 20px;
+  right: 100px;
 }
 
 #hangoutButton {
   position: fixed;
   top: 12%;
-  right: 5%;
+  right: 4%;
 }
 
 #map {
