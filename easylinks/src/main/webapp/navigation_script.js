@@ -96,7 +96,7 @@ function showDirectionsFromCurrentPosition(destLat, destLng) {
       (pos) => showDirectionsWhenSuccess(pos, destLat, destLng), 
       (error) => handleLocationError(false, error));
   } else {
-    handleLocationError(false, null);
+    handleLocationError(true, null);
   }
 }
 
@@ -116,8 +116,22 @@ function showDirectionsWhenSuccess(pos, destLat, destLng) {
   directionsService.route(routeRequest, (response, status) => {
     status === "OK" ?
     directionsRenderer.setDirections(response) :
-    window.alert("Directions request failed due to " + status);
+    showAlertMsg();
   });
+}
+
+/** Displays the error message when the route is not found */
+function showAlertMsg() {
+  const mapHeader = document.getElementById('mapHeader');
+  mapHeader.classList.add('hidden');
+
+  const alertElement = document.getElementById('alertNoResult');
+  alertElement.classList.remove('hidden');
+  alertElement.innerHTML = '<p><strong>Oops! </strong>'
+                            + 'No walking route to the destintation is found. '
+                            + 'Maybe the destination is too far for walking?';
+  
+  markers.forEach(marker => marker.setMap(map));
 }
 
 /** Handles the location error when getting the user's current location */
