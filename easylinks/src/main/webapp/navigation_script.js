@@ -57,7 +57,7 @@ function addMarker(place) {
   const infowindow = new google.maps.InfoWindow({
     content: `<p><b>${place.name}</b></p>` +
              `<p>location:${place.geometry.location}</p>` +
-             `<button onclick="showDirections(
+             `<button onclick="showDirectionsFromCurrentPosition(
                ${place.geometry.location.lat()}, 
                ${place.geometry.location.lng()})">
                Directions</button>`
@@ -89,11 +89,40 @@ function showDirections(destLat, destLng) {
   });
 }
 
+/** Navigates to the destination from the current position */
+function showDirectionsFromCurrentPosition(destLat, destLng) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => showDirectionsWhenSuccess(pos, destLat, destLng), 
+      (error) => handleLocationError(false, error));
+  } else {
+    handleLocationError(false, null);
+  }
+}
+
+/** Processes the current position and navigates the destination */
+function showDirectionsWhenSuccess(pos, destLat, destLng) {
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRenderer = new google.maps.DirectionsRenderer();
+  var routeRequest = {
+      origin:new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+      destination: new google.maps.LatLng(destLat, destLng),
+      travelMode: 'WALKING' 
+  };
+
+  // Navigate to the destionation
+  markers.forEach(marker => marker.setMap(null));
+  directionsRenderer.setMap(map);
+  directionsService.route(routeRequest, (response, status) => {
+    status === "OK" ?
+    directionsRenderer.setDirections(response) :
+    window.alert("Directions request failed due to " + status);
+  });
+}
+
 /** Handles the location error when getting the user's current location */
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(browserHasGeolocation ?
-                        'Error: The Geolocation service failed.' :
+function handleLocationError(browserHasGeolocation, error) {
+  console.log(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' + error :
                         'Error: Your browser doesn\'t support geolocation.');
-  infoWindow.open(map);
 }
