@@ -156,7 +156,7 @@ function addNavigationFromCurrentPosition(location) {
     navigator.geolocation.getCurrentPosition(
       (pos) => addNavigation(new google.maps.LatLng(pos.coords.latitude, 
           pos.coords.longitude), location),
-      (error) => handleLocationError(false, error));
+      (error) => handleLocationError(true, error));
   } else {
     handleLocationError(false, null);
   }
@@ -185,7 +185,7 @@ function addNavigation(origin, location) {
       if (status === "OK") {
         directionsRenderer.setDirections(response);
       } else {
-        alert("Directions service is not supported for this destination");
+        alert("No walking route is found");
       }
     }
   );
@@ -197,10 +197,17 @@ function getSetOffTimeFromCurrentPosition(location, when) {
     navigator.geolocation.getCurrentPosition(
       (pos) => getSetOffTime(new google.maps.LatLng(pos.coords.latitude, 
           pos.coords.longitude), location, when),
-      (error) => handleLocationError(false, error));
+      (error) => handleLocationError(true, error));
   } else {
     handleLocationError(false, null);
   }
+}
+
+/** Handles the location error when getting the user's current location */
+function handleLocationError(browserHasGeolocation, error) {
+  console.log(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' + error :
+                        'Error: Your browser doesn\'t support geolocation.');
 }
 
 /**
@@ -231,7 +238,7 @@ function getSetOffTime(origin, location, when) {
     // result returned
     var result = response.rows[0].elements;
     if (result[0].status !== "OK") {
-      addText("setoff", "<b>Travel: </b>Cannot fetch distance matrix");
+      addText("setoff", "<b>Travel: </b>No walking route is found");
       return;
     }
 
