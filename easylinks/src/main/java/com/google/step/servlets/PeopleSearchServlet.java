@@ -25,12 +25,15 @@ public class PeopleSearchServlet extends HttpServlet {
     }
     Document doc = Jsoup.connect("https://directory.columbia.edu/people/search?filter.searchTerm=" + requestUrls[2]).get();
     Elements emails = doc.select("a[class='mailto']");
-    if (emails.size() == 1 ) {
+    if (emails.isEmpty()) {
+      response.getWriter().println("<p>No result</p>");
+      response.getWriter().println("<a href=\"/index.html\">Back</a>");
+    } else if (emails.size() == 1 ) {
       response.sendRedirect("mailto:" + emails.first().html());
     } else {
-      String returnStr = "<h1>Possible Email Addresses</h1>";
+      String returnStr = "<h1 style='text-align: center'>Possible Email Addresses</h1>";
       for (Element email : emails) {
-        returnStr += "<a href=\"mailto:" + email.html() + "\">" + email.html() + "</a><br>";
+        returnStr += "<a class=\"table-container\" href=\"mailto:" + email.html() + "\">" + email.html() + "</a><br>";
       }
       response.getWriter().println(returnStr);
     }
