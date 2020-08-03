@@ -11,9 +11,15 @@ const authorizeButton = document.getElementById('authorizeButton');
 const signoutButton = document.getElementById('signoutButton');
 
 const ZOOM_LEVEL = 18;
+const CENTER = new google.maps.LatLng(40.807587, -73.961938);
 const ORIGIN = new google.maps.LatLng(40.807587, -73.961938);
 const DEFAULT_TRAVEL_MODE = 'WALKING';
 const MS_PER_SECOND = 1000;
+const NOW_ISO = (new Date()).toISOString();
+const END_OF_DAY_ISO = new Date(new Date().setHours(23, 59, 59, 999)).toISOString();
+
+var events = [];
+var idx = 0;
 
 /**
  *  Loads the auth2 library and API client library.
@@ -49,7 +55,7 @@ function updateSigninStatus(isSignedIn) {
   if (isSignedIn) {
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'block';
-    listNextEvent();
+    getAllEventsAndListMostUpcoming()
   } else {
     authorizeButton.style.display = 'block';
     signoutButton.style.display = 'none';
@@ -71,47 +77,65 @@ function handleSignoutClick(event) {
 }
 
 /**
- * Prints summary, start time, and location of the next event in
- * the authorized user's calendar. If no events are found an
- * appropriate message is printed.
+ * Retrieves all events from now to the end of the day from the user's calendar.
+ * Displays information of the most upcoming event by default.
+ * If no events are found an appropriate message is printed.
  */
-function listNextEvent() {
+function getAllEventsAndListMostUpcoming() {
   gapi.client.calendar.events.list({
     'calendarId': 'primary',
-    'timeMin': (new Date()).toISOString(),
+    'timeMin': NOW_ISO,
+    'timeMax': END_OF_DAY_ISO,
     'showDeleted': false,
     'singleEvents': true,
-    'maxResults': 1,
     'orderBy': 'startTime'
   }).then(function(response) {
-    var events = response.result.items;
+    events = response.result.items;
 
-    if (events.length > 0) {
-      var event = events[0];
+    if (events.length > 1) show("page_buttons");
 
-      var location = event.location;
-      (location) ? addNavigation(location) : location = "";
-
-      var hangoutLink = event.hangoutLink;
-      (hangoutLink) ? addHangoutButton(hangoutLink) : hangoutLink = "";
-
-      var when = event.start.dateTime;
-      if (when) {
-        when = new Date(when);
-        if (location) getSetOffTime(when, location);
-      } else {
-        when = "";
-      }
-
-      addText("overview", "Next Event: " + event.summary + " (" + 
-          when + ")" + " (" + location + ")");
-    } else {
-      addText("overview", "No upcoming events found.");
-    }
+    // Set the default display to the most upcoming event
+    (events.length > 0) ? displayEventInfo(events[0]) : addText("overview", 
+        "No upcoming events found.");
   });
 }
 
+function displayNextEventInfo() {
+  (idx + 1) < events.length ? displayEventInfo(events[++idx]) : alert("No more events");
+}
+
+function displayPrevEventInfo() {
+  (idx - 1) >= 0 ? displayEventInfo(events[--idx]) : alert("No more events");
+}
+
+function displayEventInfo(event) {
+  var location = event.location;
+  (location) ? addNavigation(location) : hide("map");
+
+  var hangoutLink = event.hangoutLink;
+  (hangoutLink) ? addHangoutButton(hangoutLink) : hide("hangout");
+
+  var when = event.start.dateTime;
+  if (when) {
+    when = new Date(when);
+    if (location) {
+      getSetOffTime(when, location)
+    } else {
+      location = "Not specified in calendar";
+      hide("setoff");
+    }
+  } else {
+    when = "Not specified in calendar";
+    hide("setoff");
+  }
+        
+  addText("overview", "<b>Next Event: </b>" + event.summary + "<br>" + 
+                      "<b>Start time: </b>" + when + "<br>" +
+                      "<b>Location: </b>" + location);
+}
+
 function addHangoutButton(hangoutLink) {
+  show("hangout");
   var div = document.getElementById("hangout");
   div.innerHTML = '';
   const buttonElement = document.createElement("button");
@@ -121,20 +145,14 @@ function addHangoutButton(hangoutLink) {
   div.appendChild(buttonElement);
 }
 
-function addText(id, message) {
-  var div = document.getElementById(id);
-  div.innerHTML = '';
-  var textContent = document.createTextNode(message);
-  div.appendChild(textContent);
-}
-
 function addNavigation(location) {
+  show("map");
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
 
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: ZOOM_LEVEL,
-    center: ORIGIN
+    center: CENTER
   });
   directionsRenderer.setMap(map);
 
@@ -145,9 +163,7 @@ function addNavigation(location) {
         // The value here is put just for ease of testing
         lat: ORIGIN.lat(), lng: ORIGIN.lng()
       },
-      destination: {
-        query: location
-      },
+      destination: location,
       travelMode: DEFAULT_TRAVEL_MODE
     },
     (response, status) => {
@@ -160,7 +176,18 @@ function addNavigation(location) {
   );
 }
 
+/**
+ * Queries the Direction Matrix API and retrieves the duration
+ * to get to the event location from the user's current location. 
+ * If the event is already ongoing, prints a message instead.
+ */
 function getSetOffTime(when, location) {
+  show("setoff");
+  if (when <= new Date()) {
+    addText("setoff", "The event is ongoing!");
+    return;
+  }
+  
   const service = new google.maps.DistanceMatrixService();
   const matrixOptions = {
     origins: [ORIGIN],
@@ -181,12 +208,29 @@ function getSetOffTime(when, location) {
     // We input one origin and one destination, so there will be only one 
     // result returned 
     var result = response.rows[0].elements;
-    addText("duration", "It takes about " + result[0].duration.text + 
-        " to get to the destination");
 
     // Calculate the set off time
     var setoffDate = new Date(when - result[0].duration.value * MS_PER_SECOND);
-    addText("setoff", "We recommend you to set off before " + setoffDate.getHours() + 
-        ":" + setoffDate.getMinutes());
+
+    addText("setoff", "<b>Travel: </b> It takes about " + "<b>" + 
+        result[0].duration.text + "</b>" + " to get to the destination. " + 
+        "We recommend you to set off before " + "<b>" + setoffDate.getHours() + 
+        ":" + setoffDate.getMinutes()+ "</b>");
   }
+}
+
+/** Adds HTML text to a div element as specified by id */
+function addText(id, message) {
+  var div = document.getElementById(id);
+  div.innerHTML = message;
+}
+
+/** Hides an element based on its id */
+function hide(id) {
+  document.getElementById(id).classList.add('hidden');
+}
+
+/** Shows an element based on its id */
+function show(id) {
+  document.getElementById(id).classList.remove('hidden');
 }
