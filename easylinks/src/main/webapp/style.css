@@ -114,6 +114,7 @@ button:hover {
   right: 5%;
 }
 
+/* CSS style-code for navigation.html */
 #map {
   height: 600px;
   width: 1000px;
@@ -121,7 +122,18 @@ button:hover {
 }
 
 #navigationBody {
-  height:100%;
+  border: thin solid black;
+  height:95%;
+}
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+  font-size: large;
 }
 
 #page_buttons {

@@ -69,32 +69,12 @@ function addMarker(place) {
   });
 }
 
-/** Navigates from the user's current position to the destination */
-function showDirections(destLat, destLng) {
-  var directionsService = new google.maps.DirectionsService();
-  var directionsRenderer = new google.maps.DirectionsRenderer();
-  var routeRequest = {
-      origin:config.TEST_LOCATION,
-      destination: new google.maps.LatLng(destLat, destLng),
-      travelMode: 'WALKING' 
-  };
-
-  // Navigate to the destionation
-  markers.forEach(marker => marker.setMap(null));
-  directionsRenderer.setMap(map);
-  directionsService.route(routeRequest, (response, status) => {
-    status === "OK" ?
-    directionsRenderer.setDirections(response) :
-    window.alert("Directions request failed due to " + status);
-  });
-}
-
 /** Navigates to the destination from the current position */
 function showDirectionsFromCurrentPosition(destLat, destLng) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (pos) => showDirectionsWhenSuccess(pos, destLat, destLng), 
-      (error) => handleLocationError(false, error));
+      (error) => handleLocationError(true, error));
   } else {
     handleLocationError(false, null);
   }
@@ -116,8 +96,22 @@ function showDirectionsWhenSuccess(pos, destLat, destLng) {
   directionsService.route(routeRequest, (response, status) => {
     status === "OK" ?
     directionsRenderer.setDirections(response) :
-    window.alert("Directions request failed due to " + status);
+    showAlertMsg();
   });
+}
+
+/** Displays the error message when the route is not found */
+function showAlertMsg() {
+  const mapHeader = document.getElementById('mapHeader');
+  mapHeader.classList.add('hidden');
+
+  const alertElement = document.getElementById('alertNoResult');
+  alertElement.classList.remove('hidden');
+  alertElement.innerHTML = '<p><strong>Oops! </strong>'
+                            + 'No walking route to the destintation is found. '
+                            + 'Maybe the destination is too far for walking?';
+  
+  markers.forEach(marker => marker.setMap(map));
 }
 
 /** Handles the location error when getting the user's current location */
@@ -125,4 +119,24 @@ function handleLocationError(browserHasGeolocation, error) {
   console.log(browserHasGeolocation ?
                         'Error: The Geolocation service failed.' + error :
                         'Error: Your browser doesn\'t support geolocation.');
+}
+
+/** Navigates from the test location to the destination */
+function showDirections(destLat, destLng) {
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRenderer = new google.maps.DirectionsRenderer();
+  var routeRequest = {
+      origin:config.TEST_LOCATION,
+      destination: new google.maps.LatLng(destLat, destLng),
+      travelMode: 'WALKING' 
+  };
+
+  // Navigate to the destionation
+  markers.forEach(marker => marker.setMap(null));
+  directionsRenderer.setMap(map);
+  directionsService.route(routeRequest, (response, status) => {
+    status === "OK" ?
+    directionsRenderer.setDirections(response) :
+    window.alert("Directions request failed due to " + status);
+  });
 }
