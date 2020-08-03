@@ -159,9 +159,10 @@ function addNavigation(location) {
   directionsService.route(
     {
       origin: {
-        // TODO: replace this fixed value with user current location
-        // The value here is put just for ease of testing
+        // For demo, use a fixed value here
         lat: ORIGIN.lat(), lng: ORIGIN.lng()
+        // For real usage, get the user's current location
+
       },
       destination: location,
       travelMode: DEFAULT_TRAVEL_MODE
@@ -170,7 +171,7 @@ function addNavigation(location) {
       if (status === "OK") {
         directionsRenderer.setDirections(response);
       } else {
-        window.alert("Directions request failed due to " + status);
+        alert("Directions service is not supported for this destination");
       }
     }
   );
@@ -201,7 +202,7 @@ function getSetOffTime(when, location) {
   // Callback function used to process Distance Matrix response
   function callback(response, status) {
     if (status !== "OK") {
-      alert("Error with distance matrix");
+      alert("Cannot fetch distance matrix");
       return;
     }
     
@@ -217,6 +218,10 @@ function getSetOffTime(when, location) {
         "We recommend you to set off before " + "<b>" + setoffDate.getHours() + 
         ":" + setoffDate.getMinutes()+ "</b>");
   }
+}
+
+function redirectToHomePage() {
+  window.location.href = '/index.html';
 }
 
 /** Adds HTML text to a div element as specified by id */
