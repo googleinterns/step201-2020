@@ -110,7 +110,10 @@ function displayPrevEventInfo() {
 
 function displayEventInfo(event) {
   var location = event.location;
-  (location) ? addNavigation(location) : hide("map");
+  // For demo
+  (location) ? addNavigation(ORIGIN, location) : hide("map");
+  // For real usage
+  // (location) ? addNavigationFromCurrentPosition(location) : hide("map");
 
   var hangoutLink = event.hangoutLink;
   (hangoutLink) ? addHangoutButton(hangoutLink) : hide("hangout");
@@ -119,7 +122,9 @@ function displayEventInfo(event) {
   if (when) {
     when = new Date(when);
     if (location) {
-      getSetOffTime(when, location)
+      getSetOffTime(ORIGIN, location, when);
+      // For real usage
+      // getSetOffTimeFromCurrentPosition(location, when);
     } else {
       location = "Not specified in calendar";
       hide("setoff");
@@ -145,7 +150,19 @@ function addHangoutButton(hangoutLink) {
   div.appendChild(buttonElement);
 }
 
-function addNavigation(location) {
+/** Navigates to the destination from the current position */
+function addNavigationFromCurrentPosition(location) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => addNavigation(new google.maps.LatLng(pos.coords.latitude, 
+          pos.coords.longitude), location),
+      (error) => handleLocationError(true, error));
+  } else {
+    handleLocationError(false, null);
+  }
+}
+
+function addNavigation(origin, location) {
   show("map");
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -159,9 +176,7 @@ function addNavigation(location) {
   directionsService.route(
     {
       origin: {
-        // TODO: replace this fixed value with user current location
-        // The value here is put just for ease of testing
-        lat: ORIGIN.lat(), lng: ORIGIN.lng()
+        lat: origin.lat(), lng: origin.lng()
       },
       destination: location,
       travelMode: DEFAULT_TRAVEL_MODE
@@ -170,10 +185,29 @@ function addNavigation(location) {
       if (status === "OK") {
         directionsRenderer.setDirections(response);
       } else {
-        window.alert("Directions request failed due to " + status);
+        alert("No walking route is found");
       }
     }
   );
+}
+
+/** Gets set off time from the current position */
+function getSetOffTimeFromCurrentPosition(location, when) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => getSetOffTime(new google.maps.LatLng(pos.coords.latitude, 
+          pos.coords.longitude), location, when),
+      (error) => handleLocationError(true, error));
+  } else {
+    handleLocationError(false, null);
+  }
+}
+
+/** Handles the location error when getting the user's current location */
+function handleLocationError(browserHasGeolocation, error) {
+  console.log(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' + error :
+                        'Error: Your browser doesn\'t support geolocation.');
 }
 
 /**
@@ -181,7 +215,7 @@ function addNavigation(location) {
  * to get to the event location from the user's current location. 
  * If the event is already ongoing, prints a message instead.
  */
-function getSetOffTime(when, location) {
+function getSetOffTime(origin, location, when) {
   show("setoff");
   if (when <= new Date()) {
     addText("setoff", "The event is ongoing!");
@@ -190,7 +224,7 @@ function getSetOffTime(when, location) {
   
   const service = new google.maps.DistanceMatrixService();
   const matrixOptions = {
-    origins: [ORIGIN],
+    origins: [origin],
     destinations: [location],
     travelMode: DEFAULT_TRAVEL_MODE,
     unitSystem: google.maps.UnitSystem.METRIC,
@@ -200,23 +234,25 @@ function getSetOffTime(when, location) {
 
   // Callback function used to process Distance Matrix response
   function callback(response, status) {
-    if (status !== "OK") {
-      alert("Error with distance matrix");
+    // We input one origin and one destination, so there will be only one 
+    // result returned
+    var result = response.rows[0].elements;
+    if (result[0].status !== "OK") {
+      addText("setoff", "<b>Travel: </b>No walking route is found");
       return;
     }
-    
-    // We input one origin and one destination, so there will be only one 
-    // result returned 
-    var result = response.rows[0].elements;
 
     // Calculate the set off time
     var setoffDate = new Date(when - result[0].duration.value * MS_PER_SECOND);
-
     addText("setoff", "<b>Travel: </b> It takes about " + "<b>" + 
         result[0].duration.text + "</b>" + " to get to the destination. " + 
         "We recommend you to set off before " + "<b>" + setoffDate.getHours() + 
         ":" + setoffDate.getMinutes()+ "</b>");
   }
+}
+
+function redirectToHomePage() {
+  window.location.href = '/index.html';
 }
 
 /** Adds HTML text to a div element as specified by id */
