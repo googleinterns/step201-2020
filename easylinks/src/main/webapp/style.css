@@ -118,12 +118,18 @@ button:hover {
 #map {
   height: 600px;
   width: 1000px;
-  left: 15%;
+  left: 13%;
 }
 
 #navigationBody {
   border: thin solid black;
+  padding: 10px;
   height:95%;
+}
+
+#navigationbtn {
+  float: right;
+  font-size: large;
 }
 
 .alert {

@@ -34,7 +34,12 @@ public class NavigateServlet extends HttpServlet {
       return;
     }
     String buildingCode = requestUrls[2].toUpperCase();
-    response.sendRedirect(NAVIGATION_PAGE + buildingMap.get(buildingCode));
+    String buildingName = buildingMap.get(buildingCode);
+    if (buildingName == null) {
+      // Building name not found in the file
+      buildingName = buildingCode;
+    }
+    response.sendRedirect(NAVIGATION_PAGE + buildingName);
   }
 
 
