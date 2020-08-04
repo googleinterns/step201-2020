@@ -29,39 +29,39 @@ public class PeopleSearchServlet extends HttpServlet {
     Document doc = Jsoup.connect("https://directory.columbia.edu/people/search?filter.searchTerm=" 
                      + requestUrls[2]).get();
     Elements emails = doc.select("a[class='mailto']");
-    if (emails.size() == 1) {
-      // Redirect to the composing page if the exact email is found
-      response.sendRedirect("mailto:" + emails.first().html());
+
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<title>Search Result</title>");
+    out.println("<link rel='stylesheet' type='text/css' href='../style.css'>");
+    out.println("<script src='../script.js'></script>");
+    out.println("</head>");
+    out.println("<body>");
+    if (emails.isEmpty()) {
+      out.println("<p class='signal'>No result</p>");
+      out.println("<button onclick='redirectToHomePage()' type='button'>Back</button>");
     } else {
-      out.println("<html>");
-      out.println("<head>");
-      out.println("<title>Search Result</title>");
-      out.println("<link rel='stylesheet' type='text/css' href='../style.css'>");
-      out.println("<script src='../script.js'></script>");
-      out.println("</head>");
-      out.println("<body>");
-      if (emails.isEmpty()) {
-        out.println("<p class='signal'>No result</p>");
-        out.println("<button onclick='redirectToHomePage()' type='button'>Back</button>");
-      } else {
-        // Display all matching emails if more than one are found
-        out.println("<h1 style='text-align: center'>Possible Email Addresses</h1>");
-        out.print("<button onclick='redirectToHomePage()' type='button' class='redirectButton'>");
-        out.println("Back</button>");
-        out.println("<div class='table-container'>");
-        out.println("<table id='link-container'>");
-        out.println("<tbody>");
-        out.println("<thead><tr><th>Email</th></tr></thead>");
-        for (Element email : emails) {
-          out.println("<tr><td><a href='mailto:" + email.html() + "'>" + email.html() + "</a></td></tr>");
-        }
-        out.println("</tbody>");
-        out.println("</table>");
-        out.println("</div>");
+      // Display all matching emails
+      out.println("<h1 style='text-align: center'>Possible Email Addresses</h1>");
+      out.print("<button onclick='redirectToHomePage()' type='button' class='redirectButton'>");
+      out.println("Back</button><br>");
+      out.println("<div class='table-container'>");
+      out.println("<table id='link-container'>");
+      out.println("<tbody>");
+      out.println("<thead><tr><th>Email</th></tr></thead>");
+      for (Element email : emails) {
+        out.println("<tr><td><a href='mailto:" + email.html() + "'>" + email.html() + "</a></td></tr>");
       }
-      out.println("</body>");
-      out.println("</html>");
+      out.println("</tbody>");
+      out.println("</table>");
+      out.println("<p>Click on the link to send an email</p>");
+      out.println("<p>Links not working? Make sure the default email client is set up.");
+      out.print("<a href='https://blog.hubspot.com/marketing/set-gmail-as-browser-default-email-client-ht'>");
+      out.println("More info</a>");
+      out.println("</div>");
     }
+    out.println("</body>");
+    out.println("</html>");
   }
 
   // The minimum valid length for a navigation URL
