@@ -139,3 +139,13 @@ button:hover {
 #page_buttons {
   text-align: center;
 }
+
+/* CSS style-code for PeopleSearchServlet.java */
+.signal {
+  background-color: lightgray;
+  color: black;
+  font-size: large;
+  opacity: 1;
+  padding: 20px;
+  transition: opacity 0.5s;
+}
