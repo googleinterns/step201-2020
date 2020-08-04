@@ -8,9 +8,12 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIDJtZ0o2uuCQrIVOjB-aJGfnxyzSIlmE&libraries=places">
     </script>
     <script src="navigation_script.js"></script>
+    <script src="script.js"></script>
   </head>
   <body id="navigationBody" onload="initMap()">
-    <h1 id="mapHeader">Navigation</h1>
+    <h1 id="mapHeader">Navigation
+      <button id="navigationbtn" onclick="redirectToHomePage()">Back</button>
+    </h1>
     <div class="hidden alert" id="alertNoResult"></div>
     <div id="map"></div>
     <h3>Note: Directions being shown are based on walking route.</h3>

@@ -109,7 +109,10 @@ function showAlertMsg() {
   alertElement.classList.remove('hidden');
   alertElement.innerHTML = '<p><strong>Oops! </strong>'
                             + 'No walking route to the destintation is found. '
-                            + 'Maybe the destination is too far for walking?';
+                            + 'Maybe the destination is too far for walking? '
+                            + '<button id="navigationbtn" '
+                            + 'onclick="redirectToHomePage()">'
+                            + 'Back</button>';
   
   markers.forEach(marker => marker.setMap(map));
 }
