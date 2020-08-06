@@ -4,11 +4,7 @@
     <meta charset="utf-8" />
     <title>Next Event</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIDJtZ0o2uuCQrIVOjB-aJGfnxyzSIlmE"></script>
-    <script async defer src="calendar_script.js"></script>
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};handleClientLoad()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
+    <script async src="calendar_script.js"></script>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
@@ -24,5 +20,10 @@
       <button id="next" onclick="displayNextEventInfo()">Next</button>
     </div>
     <button class="redirectButton" onclick="redirectToHomePage()">Back</button>
+    
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
   </body>
 </html>
