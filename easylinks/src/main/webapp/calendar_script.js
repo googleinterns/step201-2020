@@ -59,6 +59,7 @@ function updateSigninStatus(isSignedIn) {
   } else {
     authorizeButton.style.display = 'block';
     signoutButton.style.display = 'none';
+    clearPageContent();
   }
 }
 
@@ -111,12 +112,12 @@ function displayPrevEventInfo() {
 function displayEventInfo(event) {
   var location = event.location;
   // For demo
-  (location) ? addNavigation(ORIGIN, location) : hide("map");
+  (location) ? addNavigation(ORIGIN, location) : clear("map");
   // For real usage
-  // (location) ? addNavigationFromCurrentPosition(location) : hide("map");
+  // (location) ? addNavigationFromCurrentPosition(location) : clear("map");
 
   var hangoutLink = event.hangoutLink;
-  (hangoutLink) ? addHangoutButton(hangoutLink) : hide("hangout");
+  (hangoutLink) ? addHangoutButton(hangoutLink) : clear("hangout");
 
   var when = event.start.dateTime;
   if (when) {
@@ -127,11 +128,11 @@ function displayEventInfo(event) {
       // getSetOffTimeFromCurrentPosition(location, when);
     } else {
       location = "Not specified in calendar";
-      hide("setoff");
+      clear("setoff");
     }
   } else {
     when = "Not specified in calendar";
-    hide("setoff");
+    clear("setoff");
   }
         
   addText("overview", "<b>Next Event: </b>" + event.summary + "<br>" + 
@@ -140,7 +141,6 @@ function displayEventInfo(event) {
 }
 
 function addHangoutButton(hangoutLink) {
-  show("hangout");
   var div = document.getElementById("hangout");
   div.innerHTML = '';
   const buttonElement = document.createElement("button");
@@ -163,7 +163,6 @@ function addNavigationFromCurrentPosition(location) {
 }
 
 function addNavigation(origin, location) {
-  show("map");
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
 
@@ -216,7 +215,6 @@ function handleLocationError(browserHasGeolocation, error) {
  * If the event is already ongoing, prints a message instead.
  */
 function getSetOffTime(origin, location, when) {
-  show("setoff");
   if (when <= new Date()) {
     addText("setoff", "The event is ongoing!");
     return;
@@ -257,8 +255,21 @@ function redirectToHomePage() {
 
 /** Adds HTML text to a div element as specified by id */
 function addText(id, message) {
-  var div = document.getElementById(id);
-  div.innerHTML = message;
+  document.getElementById(id).innerHTML = message;
+}
+
+/** Clears the content of a div element */
+function clear(id) {
+  document.getElementById(id).innerHTML = '';
+}
+
+/** Clears all content on page */
+function clearPageContent() {
+  clear("overview");
+  clear("setoff");
+  clear("map");
+  clear("hangout");
+  hide("page_buttons");
 }
 
 /** Hides an element based on its id */
