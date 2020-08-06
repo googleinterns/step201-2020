@@ -22,7 +22,7 @@ public class RedirectionServlet extends HttpServlet {
     // Link Redirection
     if (requestUrl.charAt(1) == '~' || ServletHelper.USERSERVICE.isUserLoggedIn()) {
       String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
-          requestUrl.charAt(1) == '~' ? ADMIN : ServletHelper.USERSERVICE.getCurrentUser().getEmail(),
+          requestUrl.charAt(1) == '~' ? ServletHelper.ADMIN : ServletHelper.USERSERVICE.getCurrentUser().getEmail(),
           HOME_PAGE);
       response.sendRedirect(responseUrl);
     } else {
@@ -39,5 +39,4 @@ public class RedirectionServlet extends HttpServlet {
 
   /** Private constants for different types of link */
   private static final String HOME_PAGE = "/index.html";
-  private static final String ADMIN = "";
 }
