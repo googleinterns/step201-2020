@@ -23,9 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 public class ManageServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    final String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
+    final String email = ServletHelper.USERSERVICE.isUserLoggedIn() ?
+        ServletHelper.USERSERVICE.getCurrentUser().getEmail() : null;
     // Define a query rule that retreives records based on email and 
     // sorts links in alphabetically by shortcut
+    if (email == null) return;
     Filter emailFilter =
         new FilterPredicate("email", FilterOperator.EQUAL, email);
     Query query = new Query("Link")

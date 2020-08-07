@@ -3,12 +3,31 @@
 
 /**
  * Checks user authentication. 
- * Redirects to login page if user is not logged in
+ * If user is not logged in and on the management page, redirects to login page;
+ * If the user is on the home page, shows login button
+ * If user is logged in, shows logout button
  */
 function userAuth() {
   fetch('/~login').then(response => response.text()).then(stats => {
-    if (stats.trim() !== "okay-columbia" && stats.trim() !== "okay") {
-      window.location.href = stats;
+    if (stats.trim().startsWith("okay")) {
+      var authButton = document.getElementById("authButton");
+      authButton.innerText = "Sign out";
+      authButton.onclick = (function() {
+        window.location.href = stats.trim().substring(4);
+      });
+      authButton.classList.remove("hidden");
+    } else {
+      if (window.location.href.endsWith("manage.html")) {
+        window.location.href = stats.trim();
+      }
+      if (window.location.href.endsWith("index.html")) {
+        var authButton = document.getElementById("authButton");
+        authButton.innerText = "Sign in";
+        authButton.onclick = (function() {
+          window.location.href = stats.trim();
+        });
+        authButton.classList.remove("hidden");
+      }
     }
   });
 }

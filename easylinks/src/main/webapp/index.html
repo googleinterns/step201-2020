@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="userAuth()">
     <div class="content">
 
       <div class="search">
@@ -22,6 +22,7 @@
       
       <button class="redirectButton" onclick="redirectToManagePage()" type="button">
           Manage Links </button>
+      <button id="authButton" class="hidden" type="button"></button>
     </div>
   </body>
 </html>
