@@ -52,6 +52,9 @@ public class ManageServlet extends HttpServlet {
       case "edit":
         editLink(request, response);
         break;
+      case "go-public":
+        goPublic(request, response);
+        break;
       default:
         break;
     }
@@ -69,7 +72,7 @@ public class ManageServlet extends HttpServlet {
     // Check if the shortcut already created in the DataStore
     String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
     if (ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null) {
-      // The shorcut is already exists
+      // The shorcut already exists
       response.getWriter().println("Repeated shortcut.");
       return;
     }
@@ -110,6 +113,28 @@ public class ManageServlet extends HttpServlet {
     long id = Long.parseLong(request.getParameter("id"));
     Key linkEntityKey = KeyFactory.createKey("Link", id);
     ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
+  }
+
+  private static void goPublic(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    long id = Long.parseLong(request.getParameter("id"));
+    Key linkEntityKey = KeyFactory.createKey("Link", id);
+    try {
+      Entity easyLinkEntity = ServletHelper.DEFAULT_DATASTORE_SERVICE.get(linkEntityKey);
+      String shortcut = "~" + (String) easyLinkEntity.getProperty("shortcut");
+      
+      // Check if the shortcut already created in the DataStore
+      if (ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
+        // The shorcut already exists
+        response.getWriter().println("Repeated shortcut.");
+        return;
+      }
+      easyLinkEntity.setProperty("shortcut", shortcut);
+      easyLinkEntity.setProperty("email", ServletHelper.ADMIN);
+      ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
+    } catch(Exception e) {
+      response.getWriter().println("Invalid ID.");
+    }
+    response.sendRedirect("/manage.html");
   }
 
     private static final String PROVIDED_LINK = "~";

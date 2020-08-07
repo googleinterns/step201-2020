@@ -22,6 +22,7 @@ public final class ServletHelper {
   protected final static UserService USERSERVICE = 
                                 UserServiceFactory.getUserService();
   protected final static Gson GSON = new Gson();
+  protected final static String ADMIN = "";
 
   /** 
    * @return the request parameter, or the default value if the parameter
