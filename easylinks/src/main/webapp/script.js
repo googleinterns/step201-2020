@@ -19,8 +19,8 @@ function userAuth() {
     } else {
       if (window.location.href.endsWith("manage.html")) {
         window.location.href = stats.trim();
-      }
-      if (window.location.href.endsWith("index.html")) {
+      } else {
+        // On the home page, display a sign in button
         var authButton = document.getElementById("authButton");
         authButton.innerText = "Sign in";
         authButton.onclick = (function() {
