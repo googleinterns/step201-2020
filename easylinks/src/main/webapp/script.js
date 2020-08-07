@@ -3,8 +3,9 @@
 
 /**
  * Checks user authentication. 
- * Redirects to login page if user is not logged in
- * Shows logout button if user is logged in
+ * If user is not logged in and on the management page, redirects to login page;
+ * If the user is on the home page, shows login button
+ * If user is logged in, shows logout button
  */
 function userAuth() {
   fetch('/~login').then(response => response.text()).then(stats => {
