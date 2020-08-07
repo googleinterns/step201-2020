@@ -16,7 +16,17 @@ function userAuth() {
       });
       authButton.classList.remove("hidden");
     } else {
-      window.location.href = stats.trim();
+      if (window.location.href.endsWith("manage.html")) {
+        window.location.href = stats.trim();
+      }
+      if (window.location.href.endsWith("index.html")) {
+        var authButton = document.getElementById("authButton");
+        authButton.innerText = "Sign in";
+        authButton.onclick = (function() {
+          window.location.href = stats.trim();
+        });
+        authButton.classList.remove("hidden");
+      }
     }
   });
 }
