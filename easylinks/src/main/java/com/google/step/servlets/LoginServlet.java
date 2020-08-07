@@ -15,14 +15,8 @@ public class LoginServlet extends HttpServlet {
     response.setContentType("text/html");
     
     if (ServletHelper.USERSERVICE.isUserLoggedIn()) {
-      String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
-
-      if (email.split("@")[1].equals("columbia.edu")) {
-        response.getWriter().println("okay-columbia");
-      } else {
-        // Personal email is allowed for ease of testing
-        response.getWriter().println("okay");
-      }
+      response.getWriter().println("okay" + 
+          ServletHelper.USERSERVICE.createLogoutURL("/index.html")); 
     } else {
       // Return Login link if user is not logged in
       response.getWriter().println(ServletHelper.USERSERVICE

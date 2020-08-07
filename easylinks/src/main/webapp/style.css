@@ -65,6 +65,12 @@ button:hover {
   right: 20px;
 }
 
+#authButton {
+  position: absolute;
+  top: 20px;
+  right: 110px;
+}
+
 .center {
   text-align: center;
 }

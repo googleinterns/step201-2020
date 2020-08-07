@@ -4,11 +4,19 @@
 /**
  * Checks user authentication. 
  * Redirects to login page if user is not logged in
+ * Shows logout button if user is logged in
  */
 function userAuth() {
   fetch('/~login').then(response => response.text()).then(stats => {
-    if (stats.trim() !== "okay-columbia" && stats.trim() !== "okay") {
-      window.location.href = stats;
+    if (stats.trim().startsWith("okay")) {
+      var authButton = document.getElementById("authButton");
+      authButton.innerText = "Sign out";
+      authButton.onclick = (function() {
+        window.location.href = stats.trim().substring(4);
+      });
+      authButton.classList.remove("hidden");
+    } else {
+      window.location.href = stats.trim();
     }
   });
 }
