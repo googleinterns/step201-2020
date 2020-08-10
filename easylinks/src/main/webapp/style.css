@@ -74,9 +74,9 @@ button:hover {
 }
 
 .table-container {
-  position: absolute;
-  top: 10%;
-  left: 10%;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 #link-container {
@@ -147,7 +147,7 @@ button:hover {
   font-size: large;
 }
 
-#page_buttons {
+#page_buttons, #link_buttons {
   text-align: center;
 }
 
