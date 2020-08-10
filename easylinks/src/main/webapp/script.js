@@ -2,7 +2,7 @@
 
 var links = [];
 var offset = 0;
-const ROWS_PER_PAGE = 3;
+const ROWS_PER_PAGE = 20;
 
 /**
  * Checks user authentication. 
@@ -72,7 +72,7 @@ function displayLinks(offset) {
   var tablebody = document.getElementById('link-container-body');
   $('#link-container-body').empty();
 
-  var slice = (offset + ROWS_PER_PAGE) < links.length ?
+  var slice = (offset + ROWS_PER_PAGE) <= links.length ?
       links.slice(offset, offset + ROWS_PER_PAGE) :
       links.slice(offset);
 
