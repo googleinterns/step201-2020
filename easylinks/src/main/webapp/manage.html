@@ -26,11 +26,18 @@
               <th>Go public</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="link-container-body">
           </tbody>
         </table>
+        
+        <div id="link_buttons" class="hidden">
+          <button onclick="displayPrevPage()">Prev</button>
+          <button onclick="displayNextPage()">Next</button>
+        </div>
       </div>
     </div>
+  
+
     <div id="add-form" class="hidden">
       <form action="/~manage?action=add" method="POST">
         <label for="shortcut"><b>Shortcut</b></label><br>
