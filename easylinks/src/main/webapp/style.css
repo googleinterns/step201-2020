@@ -169,15 +169,16 @@ button:hover {
 }
 
 /* CSS style-code for display.html */
-#display-link-container {
-  border-collapse: collapse;
-  width: 100%;
+.round {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  color: black;
+  background-color: #f1f1f1;
+  border-radius: 50%;
 }
 
-#display-link-container th{
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: center;
-  background-color: #056EB4;
-  color: white;
+.round:hover {
+  background-color: #ddd;
+  color: black;
 }

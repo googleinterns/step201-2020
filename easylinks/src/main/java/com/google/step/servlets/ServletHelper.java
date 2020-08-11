@@ -36,6 +36,19 @@ public final class ServletHelper {
     return value;
   }
 
+  /** 
+   * @return the request parameter in Integer, or the default value if the parameter
+   *         was not specified by the client
+   */
+  protected static int getParameterWithDefault(HttpServletRequest request, String name, int defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null || value.isEmpty()) {
+      return defaultValue;
+    }
+    return Integer.parseInt(value);
+  }
+
+
   /**
    * Converts an List instance into the JSON format
    */
