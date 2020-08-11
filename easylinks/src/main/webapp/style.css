@@ -17,14 +17,12 @@
 }
 
 .search {
-  position: absolute;
-  top: 20%;
-  left: 20%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   height: 400px;
   width: 800px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  transform: translate(-50%, -50%);
   text-align: center;
 }
 
@@ -82,9 +80,9 @@ button:hover {
 }
 
 .table-container {
-  position: absolute;
-  top: 10%;
-  left: 10%;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 #link-container {
@@ -130,7 +128,8 @@ button:hover {
 #map {
   height: 600px;
   width: 1000px;
-  left: 13%;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 #navigationBody {
@@ -154,7 +153,7 @@ button:hover {
   font-size: large;
 }
 
-#page_buttons {
+#page_buttons, #link_buttons {
   text-align: center;
 }
 

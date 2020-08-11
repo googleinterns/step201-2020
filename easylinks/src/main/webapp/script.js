@@ -1,5 +1,8 @@
 /** Script code for the EasyLink project */
 
+var links = [];
+var offset = 0;
+const ROWS_PER_PAGE = 20;
 
 /**
  * Checks user authentication. 
@@ -38,23 +41,53 @@ function getLinks() {
   fetch(`/~manage`)
     .then(response => response.json())
     .then((stats) => {
-      var tableElement = document.getElementById('link-container');
-      tableElement.getElementsByTagName("tbody")[0].innerHTML = '';
-
-      if (stats) {
-        stats.forEach((link) => {
-          // Add a row to the table, which looks like
-          // id, shortcut, url, edit button, delete button, go-public button
-          var row = tableElement.insertRow();
-          row.insertCell(0).innerHTML = link.key.id;
-          row.insertCell(1).innerHTML = link.propertyMap.shortcut;
-          row.insertCell(2).innerHTML = createHyperLink(link.propertyMap.url);
-          row.insertCell(3).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
-          row.insertCell(4).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
-          row.insertCell(5).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
-        });
-      }
+      links = stats;
+      if (links.length > ROWS_PER_PAGE) show("link_buttons");
+      // By default, display from the beginning
+      if (links) displayLinks(offset);
   });
+}
+
+function displayNextPage() {
+  offset += ROWS_PER_PAGE;
+  if (offset < links.length) {
+    displayLinks(offset);
+  } else {
+    offset -= ROWS_PER_PAGE;
+    alert("No more links");
+  }
+}
+
+function displayPrevPage() {
+  offset -= ROWS_PER_PAGE;
+  if (offset >= 0) {
+    displayLinks(offset);
+  } else {
+    offset += ROWS_PER_PAGE;
+    alert("No more links");
+  }
+}
+
+function displayLinks(offset) {
+  var tablebody = document.getElementById('link-container-body');
+  $('#link-container-body').empty();
+
+  var slice = (offset + ROWS_PER_PAGE) <= links.length ?
+      links.slice(offset, offset + ROWS_PER_PAGE) :
+      links.slice(offset);
+
+  slice.forEach((link) => {
+    // Add a row to the table, which looks like
+    // id, shortcut, url, edit button, delete button, go-public button
+    var row = tablebody.insertRow();
+    row.insertCell(0).innerHTML = link.key.id;
+    row.insertCell(1).innerHTML = link.propertyMap.shortcut;
+    row.insertCell(2).innerHTML = createHyperLink(link.propertyMap.url);
+    row.insertCell(3).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
+    row.insertCell(4).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
+    row.insertCell(5).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
+  });
+  $("td:eq(0), th:eq(0)").hide();
 }
 
 /** Creates an element that represents a clickable url. */
@@ -125,4 +158,9 @@ function redirectToManagePage() {
 
 function redirectToHomePage() {
   window.location.href = '/index.html';
+}
+
+/** Shows an element based on its id */
+function show(id) {
+  document.getElementById(id).classList.remove('hidden');
 }
