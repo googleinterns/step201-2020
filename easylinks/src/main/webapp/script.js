@@ -98,7 +98,7 @@ function displayLinks() {
     pageElement.innerHTML = ` Page ${offset / ROWS_PER_PAGE + 1}/${TOTAL_PAGES} `;
   }
   
-  $("td:eq(0), th:eq(0)").hide();
+  $("tr td:first-child, th:eq(0)").hide();
 }
 
 /** Creates an element that represents a clickable url. */
