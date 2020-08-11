@@ -1,6 +1,6 @@
 let currentPage;
 let TOTAL_PAGES;
-const LINKS_PER_PAGE = 3;
+const LINKS_PER_PAGE = 20;
 
 /** Initializes the diplay functionality.
     Gets the total pages from the datastore */
@@ -12,7 +12,7 @@ async function init() {
   const totalLinks = parseInt(content);
   TOTAL_PAGES = Math.ceil(totalLinks / LINKS_PER_PAGE);
   currentPage = 0;
-  
+
   showPublicLinksInCurrentPage();
 }
 
