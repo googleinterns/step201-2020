@@ -2,6 +2,7 @@
 
 var links = [];
 var offset = 0;
+var TOTAL_PAGES;
 const ROWS_PER_PAGE = 20;
 
 /**
@@ -41,17 +42,30 @@ function getLinks() {
   fetch(`/~manage`)
     .then(response => response.json())
     .then((stats) => {
-      links = stats;
-      if (links.length > ROWS_PER_PAGE) show("link_buttons");
-      // By default, display from the beginning
-      if (links) displayLinks(offset);
+      if (links) {
+        links = stats;
+        TOTAL_PAGES = Math.ceil(links.length / ROWS_PER_PAGE);
+        // By default, display from the beginning
+        displayFirstPage();
+      }
   });
+}
+
+function displayFirstPage() {
+  offset = 0;
+  displayLinks();
+}
+
+function displayLastPage() {
+  offset = (links.length % ROWS_PER_PAGE == 0) ? links.length - ROWS_PER_PAGE
+      : links.length - links.length % ROWS_PER_PAGE;
+  displayLinks();
 }
 
 function displayNextPage() {
   offset += ROWS_PER_PAGE;
   if (offset < links.length) {
-    displayLinks(offset);
+    displayLinks();
   } else {
     offset -= ROWS_PER_PAGE;
     alert("No more links");
@@ -61,18 +75,18 @@ function displayNextPage() {
 function displayPrevPage() {
   offset -= ROWS_PER_PAGE;
   if (offset >= 0) {
-    displayLinks(offset);
+    displayLinks();
   } else {
     offset += ROWS_PER_PAGE;
     alert("No more links");
   }
 }
 
-function displayLinks(offset) {
+function displayLinks() {
   var tablebody = document.getElementById('link-container-body');
   $('#link-container-body').empty();
 
-  var slice = (offset + ROWS_PER_PAGE) <= links.length ?
+  var slice = (offset + ROWS_PER_PAGE) < links.length ?
       links.slice(offset, offset + ROWS_PER_PAGE) :
       links.slice(offset);
 
@@ -87,6 +101,11 @@ function displayLinks(offset) {
     row.insertCell(4).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
     row.insertCell(5).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
   });
+  
+  const pageElement = document.getElementById('pageNumber');
+  pageElement.innerHTML = ` Page ${offset / ROWS_PER_PAGE + 1}/${TOTAL_PAGES} `;
+  
+  // Hide id
   $("td:eq(0), th:eq(0)").hide();
 }
 
