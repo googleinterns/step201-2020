@@ -2,7 +2,7 @@
 
 var links = [];
 var offset = 0;
-var TOTAL_PAGES;
+var TOTAL_PAGES = 0;
 const ROWS_PER_PAGE = 20;
 
 /**
@@ -45,6 +45,7 @@ function getLinks() {
       if (links) {
         links = stats;
         TOTAL_PAGES = Math.ceil(links.length / ROWS_PER_PAGE);
+        if (links.length > 0) show("page_buttons");
         // By default, display from the beginning
         displayFirstPage();
       }
@@ -64,22 +65,12 @@ function displayLastPage() {
 
 function displayNextPage() {
   offset += ROWS_PER_PAGE;
-  if (offset < links.length) {
-    displayLinks();
-  } else {
-    offset -= ROWS_PER_PAGE;
-    alert("No more links");
-  }
+  (offset < links.length) ? displayLinks(): offset -= ROWS_PER_PAGE;
 }
 
 function displayPrevPage() {
   offset -= ROWS_PER_PAGE;
-  if (offset >= 0) {
-    displayLinks();
-  } else {
-    offset += ROWS_PER_PAGE;
-    alert("No more links");
-  }
+  (offset >= 0) ? displayLinks() : offset += ROWS_PER_PAGE;
 }
 
 function displayLinks() {
@@ -102,10 +93,11 @@ function displayLinks() {
     row.insertCell(5).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
   });
   
-  const pageElement = document.getElementById('pageNumber');
-  pageElement.innerHTML = ` Page ${offset / ROWS_PER_PAGE + 1}/${TOTAL_PAGES} `;
+  if (TOTAL_PAGES !== 0) {
+    const pageElement = document.getElementById('pageNumber');
+    pageElement.innerHTML = ` Page ${offset / ROWS_PER_PAGE + 1}/${TOTAL_PAGES} `;
+  }
   
-  // Hide id
   $("td:eq(0), th:eq(0)").hide();
 }
 
