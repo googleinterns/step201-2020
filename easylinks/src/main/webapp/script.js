@@ -87,7 +87,7 @@ function displayLinks(offset) {
     row.insertCell(4).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
     row.insertCell(5).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
   });
-  $("td:eq(0), th:eq(0)").hide();
+  $("tr td:first-child, th:eq(0)").hide();
 }
 
 /** Creates an element that represents a clickable url. */
