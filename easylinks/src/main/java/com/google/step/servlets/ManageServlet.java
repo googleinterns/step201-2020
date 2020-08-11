@@ -132,6 +132,7 @@ public class ManageServlet extends HttpServlet {
       }
       easyLinkEntity.setProperty("shortcut", shortcut);
       easyLinkEntity.setProperty("email", ServletHelper.ADMIN);
+      easyLinkEntity.setProperty("creator", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
       ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
     } catch(Exception e) {
       response.getWriter().println("Invalid ID.");

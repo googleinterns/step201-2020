@@ -1,5 +1,11 @@
 /* HTML style-related code for EasyLink project*/
 
+.content {
+  width: 650px;
+  height: 1000px;
+  margin: auto;
+}
+
 .hidden {
   display: none;
 }
@@ -100,7 +106,7 @@ button:hover {
 #link-container th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
+  text-align: center;
   background-color: #056EB4;
   color: white;
 }
@@ -159,4 +165,19 @@ button:hover {
   opacity: 1;
   padding: 20px;
   transition: opacity 0.5s;
+}
+
+/* CSS style-code for display.html */
+.round {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  color: black;
+  background-color: #f1f1f1;
+  border-radius: 50%;
+}
+
+.round:hover {
+  background-color: #ddd;
+  color: black;
 }

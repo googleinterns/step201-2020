@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Public Links</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="display_script.js"></script>
+  </head>
+  <body onload="init()" class="center">
+    <button onclick="redirectToHomePage()" 
+        type="button" class="redirectButton">Back</button>
+    <h1>Public Links</h1>
+    <div class="content">
+      <table id="link-container">
+        <thead>
+          <tr>
+            <th>Shorcut</th>
+            <th>URL</th>
+            <th>Creator</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <br>
+      <div>
+        <a href="#" class="round" onclick="showFirstPage()">&laquo;</a>
+        <a href="#" class="round" onclick="showPrevPage()">&#8249;</a>
+        <a id="pageNumber"></a>
+        <a href="#" class="round" onclick="showNextPage()">&#8250;</a>
+        <a href="#" class="round" onclick="showLastPage()">&raquo;</a>
+      </div>
+    </div>
+  </body>
+</html>
