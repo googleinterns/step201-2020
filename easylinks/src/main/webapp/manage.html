@@ -29,17 +29,20 @@
           <tbody id="link-container-body">
           </tbody>
         </table>
+
+        <div id="page_buttons" class="center hidden">
+          <a href="#" class="round" onclick="displayFirstPage()">&laquo;</a>
+          <a href="#" class="round" onclick="displayPrevPage()">&#8249;</a>
+          <a id="pageNumber"></a>
+          <a href="#" class="round" onclick="displayNextPage()">&#8250;</a>
+          <a href="#" class="round" onclick="displayLastPage()">&raquo;</a>
+        </div>
         <br/><hr>
         <p>Not sure which links are public? 
           <a href="display.html">Click here</a>
         </p>        
-        <div id="link_buttons" class="hidden">
-          <button onclick="displayPrevPage()">Prev</button>
-          <button onclick="displayNextPage()">Next</button>
-        </div>
       </div>
     </div>
-  
 
     <div id="add-form" class="hidden">
       <form action="/~manage?action=add" method="POST">
