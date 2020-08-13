@@ -1,6 +1,6 @@
 let currentPage;
 let PUBLIC_LINK_TOTAL_PAGE;
-const PUBLIC_LINKS_PER_PAGE = 20;
+const PUBLIC_LINKS_PER_PAGE = 10;
 
 /** Initializes the diplay functionality.
     Gets the total pages from the datastore */
@@ -62,17 +62,6 @@ function showPublicLinksInCurrentPage() {
 
   const pageElement = document.getElementById('pageNumber');
   pageElement.innerHTML = ` Page ${currentPage + 1}/${PUBLIC_LINK_TOTAL_PAGE} `;
-}
-
-/** Diplays each link in the list in a table */
-function clearLinkTable(tableElement) {
-  // Clear the current content in the table
-  tableElement.getElementsByTagName('tbody')[0].innerHTML = '';
-
-  // Clear the tr list except the 1st one, which is the title
-  const trList = Array.prototype.slice.call(
-                    tableElement.getElementsByTagName('tr'), 1);
-  trList.forEach(tr => tr.innerHTML = '');
 }
 
 /** Creates and returns an mailto html text string */
