@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet responsible for displaying the existing public links */
-@WebServlet("/diplay-public-link")
+@WebServlet("/display-public-link")
 public class PublicLinkServlet extends HttpServlet {
 
   /** Responses the number of public links in the datastore */

@@ -97,7 +97,6 @@ function displayLinks() {
     const pageElement = document.getElementById('pageNumber');
     pageElement.innerHTML = ` Page ${offset / ROWS_PER_PAGE + 1}/${TOTAL_PAGES} `;
   }
-  
   $("tr td:first-child, th:eq(0)").hide();
 }
 

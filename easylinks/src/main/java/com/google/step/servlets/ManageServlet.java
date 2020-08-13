@@ -57,6 +57,8 @@ public class ManageServlet extends HttpServlet {
       case "go-public":
         goPublic(request, response);
         break;
+      case "go-private":
+        goPrivate(request, response);
       default:
         break;
     }
@@ -133,6 +135,37 @@ public class ManageServlet extends HttpServlet {
       easyLinkEntity.setProperty("shortcut", shortcut);
       easyLinkEntity.setProperty("email", ServletHelper.ADMIN);
       easyLinkEntity.setProperty("creator", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
+      ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
+    } catch(Exception e) {
+      response.getWriter().println("Invalid ID.");
+    }
+    response.sendRedirect("/manage.html");
+  }
+
+  private static void goPrivate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    long id = Long.parseLong(request.getParameter("id"));
+    Key linkEntityKey = KeyFactory.createKey("Link", id);
+    try {
+      Entity easyLinkEntity = ServletHelper.DEFAULT_DATASTORE_SERVICE.get(linkEntityKey);
+      String shortcut = (String) easyLinkEntity.getProperty("shortcut");
+      shortcut = shortcut.substring(1);
+      String creator = (String) easyLinkEntity.getProperty("creator");
+
+      // Check if the user is the creator of the public link
+      if (!creator.equals((String) ServletHelper.USERSERVICE.getCurrentUser().getEmail())) {
+        response.getWriter().println("Wrong user.");
+        return;
+      }
+      
+      // Check if the shortcut already created in the DataStore
+      if (ServletHelper.fetchUrlWithDefault(shortcut, 
+              (String) easyLinkEntity.getProperty("creator"), null) != null) {
+        // The shorcut already exists
+        response.getWriter().println("Repeated shortcut.");
+        return;
+      }
+      easyLinkEntity.setProperty("shortcut", shortcut);
+      easyLinkEntity.setProperty("email", (String) easyLinkEntity.getProperty("creator"));
       ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
     } catch(Exception e) {
       response.getWriter().println("Invalid ID.");
