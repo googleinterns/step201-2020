@@ -50,8 +50,8 @@ function showPublicLinksInCurrentPage() {
 
   fetch('/diplay-public-link', {method: 'POST', body: params})
     .then(response => response.json()).then((links) => {
-      let tableElement = document.getElementById('link-container');
-      clearLinkTable(tableElement);
+      let tableElement = document.getElementById('link-container-body');
+      tableElement.innerHTML = '';
       links.forEach((link) => {
       let row = tableElement.insertRow();
       row.insertCell(0).innerHTML = link.propertyMap.shortcut;
