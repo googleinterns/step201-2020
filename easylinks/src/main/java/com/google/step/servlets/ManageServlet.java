@@ -124,7 +124,7 @@ public class ManageServlet extends HttpServlet {
     Key linkEntityKey = KeyFactory.createKey("Link", id);
     try {
       Entity easyLinkEntity = ServletHelper.DEFAULT_DATASTORE_SERVICE.get(linkEntityKey);
-      String shortcut = "~" + (String) easyLinkEntity.getProperty("shortcut");
+      String shortcut = (String) easyLinkEntity.getProperty("shortcut");
       
       // Check if the shortcut already created in the DataStore
       if (ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
@@ -132,7 +132,7 @@ public class ManageServlet extends HttpServlet {
         response.getWriter().println("Repeated shortcut.");
         return;
       }
-      easyLinkEntity.setProperty("shortcut", shortcut);
+
       easyLinkEntity.setProperty("email", ServletHelper.ADMIN);
       easyLinkEntity.setProperty("creator", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
       ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
@@ -148,7 +148,6 @@ public class ManageServlet extends HttpServlet {
     try {
       Entity easyLinkEntity = ServletHelper.DEFAULT_DATASTORE_SERVICE.get(linkEntityKey);
       String shortcut = (String) easyLinkEntity.getProperty("shortcut");
-      shortcut = shortcut.substring(1);
       String creator = (String) easyLinkEntity.getProperty("creator");
 
       // Check if the user is the creator of the public link
@@ -164,7 +163,7 @@ public class ManageServlet extends HttpServlet {
         response.getWriter().println("Repeated shortcut.");
         return;
       }
-      easyLinkEntity.setProperty("shortcut", shortcut);
+      
       easyLinkEntity.setProperty("email", (String) easyLinkEntity.getProperty("creator"));
       ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
     } catch(Exception e) {
