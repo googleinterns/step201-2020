@@ -1,9 +1,11 @@
 /* HTML style-related code for EasyLink project*/
 
 .content {
-  width: 650px;
+  min-width: 650px;
+  width: 1000px;
   height: 1000px;
   margin: auto;
+  overflow: auto;
 }
 
 .hidden {
