@@ -3,7 +3,7 @@
 var links = [];
 var offset = 0;
 var TOTAL_PAGES = 0;
-const ROWS_PER_PAGE = 20;
+const ROWS_PER_PAGE = 10;
 
 /**
  * Checks user authentication. 
@@ -135,9 +135,7 @@ function deleteLink(btn) {
 }
 
 function goPublic(btn) {
-  var message = "Public links cannot be make back to private again.\n";
-  message += "To use the link in the future, append '~' at the beginning.\n";
-  message += "e.g. use '~hello' instead of 'hello'.";
+  var message = "Are you sure you want to make this link public?";
   if (window.confirm(message)) {
     const params = new URLSearchParams();
     params.append('id', $(btn).closest("tr").find("td:first").text());

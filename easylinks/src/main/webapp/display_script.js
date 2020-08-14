@@ -68,9 +68,7 @@ function showPublicLinksInCurrentPage() {
 }
 
 function goPrivate(btn) {
-  var message = "Are you sure you want to make this link private?\n";
-  message += "To use the link in the future, eliminate '~' at the beginning.\n";
-  message += "e.g. use 'hello' instead of '~hello'.";
+  var message = "Are you sure you want to make this link private?";
   if (window.confirm(message)) {
     const params = new URLSearchParams();
     params.append('id', $(btn).closest("tr").find("td:first").text());
