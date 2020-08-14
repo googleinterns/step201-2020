@@ -60,11 +60,9 @@ function showPublicLinksInCurrentPage() {
       row.insertCell(3).innerHTML = createMailtoString(link.propertyMap.creator);
       row.insertCell(4).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
       });
+      $("tr td:first-child, th:eq(0)").hide();
     });
 
-  $(document).ready(function() {
-    $("tr td:first-child, th:eq(0)").hide();
-  });
   const pageElement = document.getElementById('pageNumber');
   pageElement.innerHTML = ` Page ${currentPage + 1}/${PUBLIC_LINK_TOTAL_PAGE} `;
 }
