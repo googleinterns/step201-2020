@@ -73,7 +73,7 @@ public class ManageServlet extends HttpServlet {
     String shortcut = ServletHelper.getParameterWithDefault(request, "shortcut", "");
     String url = ServletHelper.getParameterWithDefault(request, "url", "");
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
-      response.getWriter().println(CHANGE_LINK_ERROR);
+      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
       return;
     }
 
@@ -101,7 +101,7 @@ public class ManageServlet extends HttpServlet {
     String shortcut = ServletHelper.getParameterWithDefault(request, "ed-shortcut", "");
     String url = ServletHelper.getParameterWithDefault(request, "ed-url", "");
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
-      response.getWriter().println(CHANGE_LINK_ERROR);
+      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
       return;
     }
 
@@ -181,9 +181,8 @@ public class ManageServlet extends HttpServlet {
   }
 
     private static final String PROVIDED_LINK = "~";
-    private static final String CHANGE_LINK_ERROR = "Process Failed. The reasons may be: \n"
-                                          + "  - The shortcut is an empty string.\n"
-                                          + "  - The shortcut starts with '~' that is reserved "
-                                          + "for some other functionalities.\n"
-                                          + "  - The URL is an empty string. ";
+    private static final String CHANGE_LINK_ERROR = "Process Failed. The reasons may be: \\n"
+                                    + "The shortcut is an empty string.\\n"
+                                    + "The shortcut starts with '~'.\\n"
+                                    + "The URL is an empty string.";
 }

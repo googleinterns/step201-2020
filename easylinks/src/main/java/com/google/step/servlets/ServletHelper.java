@@ -11,6 +11,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gson.Gson;
 import java.util.List;
+import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 
 /** Class contains the common used helper method for servlets.*/
@@ -23,6 +24,7 @@ public final class ServletHelper {
                                 UserServiceFactory.getUserService();
   protected final static Gson GSON = new Gson();
   protected final static String ADMIN = "";
+  protected final static String EMPTY_INPUT = "Empty input, please check your input."; 
 
   /** 
    * @return the request parameter, or the default value if the parameter
@@ -76,6 +78,16 @@ public final class ServletHelper {
       return defaultValue;
     }
     return (String) easyLinkEntity.getProperty("url");
+  }
+
+  /** Creates a script to diplay the given error message and redirect to the home page */
+  protected static void showErrorMsg(String msg, PrintWriter out) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("<script type=\"text/javascript\">\nalert(\"");
+    sb.append(msg);
+    sb.append("\");\nlocation='index.html';</script>");
+    out.println(sb);
+    out.close();
   }
 
   /** Disables the default constructor */
