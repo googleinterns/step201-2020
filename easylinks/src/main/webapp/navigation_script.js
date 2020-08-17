@@ -1,6 +1,3 @@
-/**Script code for navigation page */
-
-
 // Stores the configurations of the map
 const config = {
   URL_CUT_LENGTH: 6, 
@@ -26,7 +23,7 @@ function initMap() {
   showDestination(dest);
 }
 
-/** Displays the destination on the map */
+/** Searches and Displays the destination on the map */
 function showDestination(dest) {
   const request = {
     query: dest, 

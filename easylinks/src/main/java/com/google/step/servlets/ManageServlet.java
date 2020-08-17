@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet responsible for managing links. */
 @WebServlet("/~manage")
 public class ManageServlet extends HttpServlet {
+
+  /** Returns the private links created by the user */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     final String email = ServletHelper.USERSERVICE.isUserLoggedIn() ?
@@ -40,6 +42,7 @@ public class ManageServlet extends HttpServlet {
         results.asList(FetchOptions.Builder.withDefaults())));
   }
 
+  /** Manages the links in the DataStore*/
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String action = ServletHelper.getParameterWithDefault(request, "action", "");
@@ -64,12 +67,13 @@ public class ManageServlet extends HttpServlet {
     }
   }
 
+  /** Adds the link and its corresponding url to the DataStore */
   private static void addLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Check the input strings are valid
     String shortcut = ServletHelper.getParameterWithDefault(request, "shortcut", "");
     String url = ServletHelper.getParameterWithDefault(request, "url", "");
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
-      response.getWriter().println("Invalid Input.");
+      response.getWriter().println(CHANGE_LINK_ERROR);
       return;
     }
 
@@ -91,12 +95,13 @@ public class ManageServlet extends HttpServlet {
     response.sendRedirect("/manage.html");
   }
 
+  /** Edits the existing link in the DataStore */
   private static void editLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
     long id = Long.parseLong(request.getParameter("ed-id"));
     String shortcut = ServletHelper.getParameterWithDefault(request, "ed-shortcut", "");
     String url = ServletHelper.getParameterWithDefault(request, "ed-url", "");
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
-      response.getWriter().println("Invalid Input.");
+      response.getWriter().println(CHANGE_LINK_ERROR);
       return;
     }
 
@@ -113,12 +118,14 @@ public class ManageServlet extends HttpServlet {
     response.sendRedirect("/manage.html");
   }
 
+  /** Deletes the link from DataStore */
   private static void deleteLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
     long id = Long.parseLong(request.getParameter("id"));
     Key linkEntityKey = KeyFactory.createKey("Link", id);
     ServletHelper.DEFAULT_DATASTORE_SERVICE.delete(linkEntityKey);
   }
 
+  /** Makes a personal link to public so that everyone can view and use it */
   private static void goPublic(HttpServletRequest request, HttpServletResponse response) throws IOException {
     long id = Long.parseLong(request.getParameter("id"));
     Key linkEntityKey = KeyFactory.createKey("Link", id);
@@ -142,6 +149,7 @@ public class ManageServlet extends HttpServlet {
     response.sendRedirect("/manage.html");
   }
 
+  /** Makes a public link to a private link that can only be used by the creator */
   private static void goPrivate(HttpServletRequest request, HttpServletResponse response) throws IOException {
     long id = Long.parseLong(request.getParameter("id"));
     Key linkEntityKey = KeyFactory.createKey("Link", id);
@@ -173,4 +181,9 @@ public class ManageServlet extends HttpServlet {
   }
 
     private static final String PROVIDED_LINK = "~";
+    private static final String CHANGE_LINK_ERROR = "Process Failed. The reasons may be: \n"
+                                          + "  - The shortcut is an empty string.\n"
+                                          + "  - The shortcut starts with '~' that is reserved "
+                                          + "for some other functionalities.\n"
+                                          + "  - The URL is an empty string. ";
 }
