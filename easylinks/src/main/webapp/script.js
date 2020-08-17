@@ -151,6 +151,33 @@ function goPublic(btn) {
   }
 }
 
+function getLinkbyShortcut() {
+  var noresult = true;
+  links.forEach((link) => { 
+    if (link.propertyMap.shortcut === document.getElementById('shortcut').value) {
+      noresult = false;
+
+      // Empty the table
+      var tablebody = document.getElementById('link-container-body');
+      $('#link-container-body').empty();
+      
+      var row = tablebody.insertRow();
+      row.insertCell(0).innerHTML = link.key.id;
+      row.insertCell(1).innerHTML = link.propertyMap.shortcut;
+      addWordBreakToCell(row.insertCell(2), createHyperLink(link.propertyMap.url));
+      row.insertCell(3).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
+      row.insertCell(4).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
+      row.insertCell(5).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
+
+      // Hide id
+      $("tr td:first-child, th:eq(0)").hide();
+      return;
+    }
+  });
+  
+  if (noresult) alert("No matching shortcut is found");
+}
+
 function redirectToManagePage() {
   userAuth();
   window.location.href = '/manage.html';
