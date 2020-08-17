@@ -198,3 +198,7 @@ button:hover {
   background-color: #ddd;
   color: black;
 }
+
+.break {
+  word-break: break-all;
+}

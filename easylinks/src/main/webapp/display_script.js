@@ -53,12 +53,12 @@ function showPublicLinksInCurrentPage() {
       let tableElement = document.getElementById('link-container-body');
       tableElement.innerHTML = '';
       links.forEach((link) => {
-      let row = tableElement.insertRow();
-      row.insertCell(0).innerHTML = link.key.id;
-      row.insertCell(1).innerHTML = link.propertyMap.shortcut;
-      row.insertCell(2).innerHTML = link.propertyMap.url;
-      row.insertCell(3).innerHTML = createMailtoString(link.propertyMap.creator);
-      row.insertCell(4).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
+        let row = tableElement.insertRow();
+        row.insertCell(0).innerHTML = link.key.id;
+        row.insertCell(1).innerHTML = link.propertyMap.shortcut;
+        addWordBreakToCell(row.insertCell(2), link.propertyMap.url);
+        row.insertCell(3).innerHTML = createMailtoString(link.propertyMap.creator);
+        row.insertCell(4).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
       });
       $("tr td:first-child, th:eq(0)").hide();
     });
@@ -84,6 +84,12 @@ function goPrivate(btn) {
           }
         });
   }
+}
+
+/** Adds the word-break rule to the cell */
+function addWordBreakToCell(cell, content) {
+  cell.innerHTML = content;
+  cell.classList.add('break');
 }
 
 /** Creates and returns an mailto html text string */

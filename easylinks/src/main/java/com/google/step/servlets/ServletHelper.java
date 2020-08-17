@@ -42,10 +42,13 @@ public final class ServletHelper {
    */
   protected static int getParameterWithDefault(HttpServletRequest request, String name, int defaultValue) {
     String value = request.getParameter(name);
-    if (value == null || value.isEmpty()) {
+
+    try {
+      return Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      // String doesn't contain a parsable integer
       return defaultValue;
     }
-    return Integer.parseInt(value);
   }
 
 

@@ -79,7 +79,7 @@ function displayLinks() {
     var row = tablebody.insertRow();
     row.insertCell(0).innerHTML = link.key.id;
     row.insertCell(1).innerHTML = link.propertyMap.shortcut;
-    row.insertCell(2).innerHTML = createHyperLink(link.propertyMap.url);
+    addWordBreakToCell(row.insertCell(2), createHyperLink(link.propertyMap.url));
     row.insertCell(3).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
     row.insertCell(4).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
     row.insertCell(5).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
