@@ -12,8 +12,25 @@
 
 #edit-form, #add-form {
   position: fixed;
-  bottom: 0;
+  bottom: 40%;
   right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+}
+
+.form-container input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .search {
