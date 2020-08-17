@@ -1,11 +1,9 @@
 /* HTML style-related code for EasyLink project*/
 
 .content {
-  min-width: 650px;
-  width: 1000px;
+  width: 650px;
   height: 1000px;
   margin: auto;
-  overflow: auto;
 }
 
 .hidden {
@@ -182,4 +180,8 @@ button:hover {
 .round:hover {
   background-color: #ddd;
   color: black;
+}
+
+.break {
+  word-break: break-all;
 }

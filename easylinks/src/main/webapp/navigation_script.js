@@ -123,23 +123,3 @@ function handleLocationError(browserHasGeolocation, error) {
                         'Error: The Geolocation service failed.' + error :
                         'Error: Your browser doesn\'t support geolocation.');
 }
-
-/** Navigates from the test location to the destination */
-function showDirections(destLat, destLng) {
-  var directionsService = new google.maps.DirectionsService();
-  var directionsRenderer = new google.maps.DirectionsRenderer();
-  var routeRequest = {
-      origin:config.TEST_LOCATION,
-      destination: new google.maps.LatLng(destLat, destLng),
-      travelMode: 'WALKING' 
-  };
-
-  // Navigate to the destionation
-  markers.forEach(marker => marker.setMap(null));
-  directionsRenderer.setMap(map);
-  directionsService.route(routeRequest, (response, status) => {
-    status === "OK" ?
-    directionsRenderer.setDirections(response) :
-    window.alert("Directions request failed due to " + status);
-  });
-}
