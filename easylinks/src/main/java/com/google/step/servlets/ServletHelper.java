@@ -81,11 +81,13 @@ public final class ServletHelper {
   }
 
   /** Creates a script to diplay the given error message and redirect to the home page */
-  protected static void showErrorMsg(String msg, PrintWriter out) {
+  protected static void showErrorMsg(String msg, String page, PrintWriter out) {
     StringBuilder sb = new StringBuilder();
     sb.append("<script type=\"text/javascript\">\nalert(\"");
     sb.append(msg);
-    sb.append("\");\nlocation='index.html';</script>");
+    sb.append("\");\nlocation='");
+    sb.append(page);
+    sb.append("';</script>");
     out.println(sb);
     out.close();
   }

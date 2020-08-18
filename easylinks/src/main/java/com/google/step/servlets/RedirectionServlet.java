@@ -17,7 +17,7 @@ public class RedirectionServlet extends HttpServlet {
     String requestUrl = request.getRequestURI();
     if (requestUrl.isEmpty()) {
       // Invalid input url, redirect to the home page
-      ServletHelper.showErrorMsg(ServletHelper.EMPTY_INPUT, response.getWriter());
+      ServletHelper.showErrorMsg(ServletHelper.EMPTY_INPUT, HOME_PAGE, response.getWriter());
       return;
     }
     
@@ -28,7 +28,7 @@ public class RedirectionServlet extends HttpServlet {
       response.sendRedirect(responseUrl);
     } else if (isUserLoggedIn) {
       // URL not found and the user is logged in, show the error message
-      ServletHelper.showErrorMsg(NOT_FOUND_ERROR_MESSAGE, response.getWriter());
+      ServletHelper.showErrorMsg(NOT_FOUND_ERROR_MESSAGE, HOME_PAGE, response.getWriter());
     } else {
       // URL not found and the user is not logged in, prompt to login
       response.sendRedirect(ServletHelper.USERSERVICE.createLoginURL(HOME_PAGE));
