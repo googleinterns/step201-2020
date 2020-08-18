@@ -69,19 +69,14 @@ public class ManageServlet extends HttpServlet {
 
   /** Adds the link and its corresponding url to the DataStore */
   private static void addLink(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Check the input strings are valid
+    // Check the input strings are valid and if the shortcut already created in the DataStore
     String shortcut = ServletHelper.getParameterWithDefault(request, "shortcut", "");
     String url = ServletHelper.getParameterWithDefault(request, "url", "");
-    if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty()) {
-      response.getWriter().println(CHANGE_LINK_ERROR);
-      return;
-    }
-
-    // Check if the shortcut already created in the DataStore
     String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
-    if (ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null) {
-      // The shorcut already exists
-      response.getWriter().println("Repeated shortcut.");
+    if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty() ||
+        ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null ||
+        ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
+      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
       return;
     }
 
@@ -106,11 +101,7 @@ public class ManageServlet extends HttpServlet {
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty() ||
         ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null ||
         ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
-      String outputString = "<script type=\"text/javascript\">";
-      outputString += "alert(\"" + CHANGE_LINK_ERROR + "\");";
-      outputString += "location='manage.html';";
-      outputString += "</script>";
-      response.getWriter().println(outputString);
+      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
       return;
     }
 
@@ -145,12 +136,8 @@ public class ManageServlet extends HttpServlet {
       // Check if the shortcut already created in the DataStore
       if (ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
         // The shorcut already exists
-        String outputString = "<script type=\"text/javascript\">";
-      outputString += "alert(\"" + CHANGE_LINK_ERROR + "\");";
-      outputString += "location='manage.html';";
-      outputString += "</script>";
-      response.getWriter().println(outputString);
-      return;
+        ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
+        return;
       }
       easyLinkEntity.setProperty("email", ServletHelper.ADMIN);
       easyLinkEntity.setProperty("creator", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
@@ -172,7 +159,7 @@ public class ManageServlet extends HttpServlet {
 
       // Check if the user is the creator of the public link
       if (!creator.equals((String) ServletHelper.USERSERVICE.getCurrentUser().getEmail())) {
-        response.getWriter().println("Wrong user.");
+        ServletHelper.showErrorMsg(WRONG_USER_ERROR, response.getWriter());
         return;
       }
       
@@ -185,8 +172,10 @@ public class ManageServlet extends HttpServlet {
   }
 
     private static final String PROVIDED_LINK = "~";
-    private static final String CHANGE_LINK_ERROR = "Process Failed. "
-                                          + "Make sure that the shortcut and the URL are not empty "
-                                          + "and that the shortcut does not already exist "
-                                          + "or start with '~'.";
+    private static final String CHANGE_LINK_ERROR = "Process Failed. The reasons may be: \\n"
+                                    + "The shortcut is an empty string.\\n"
+                                    + "The shortcut starts with '~'.\\n"
+                                    + "The shortcut already exists.\\n"
+                                    + "The URL is an empty string.";
+    private static final String WRONG_USER_ERROR = "Only the creator can make this change.";
 }
