@@ -14,31 +14,23 @@ public class RedirectionServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    PrintWriter out = response.getWriter();
     String requestUrl = request.getRequestURI();
     if (requestUrl.isEmpty()) {
       // Invalid input url, redirect to the home page
-      response.sendRedirect(HOME_PAGE);
+      ServletHelper.showErrorMsg(ServletHelper.EMPTY_INPUT, response.getWriter());
       return;
     }
     
-    // Link Redirection
-    if (requestUrl.charAt(1) == '~' || ServletHelper.USERSERVICE.isUserLoggedIn()) {
-      String responseUrl = ServletHelper.fetchUrlWithDefault(requestUrl.substring(1),
-          requestUrl.charAt(1) == '~' ? ServletHelper.ADMIN : ServletHelper.USERSERVICE.getCurrentUser().getEmail(),
-          null);
-    
-      if (responseUrl == null) {
-        // Alert user if no url is found and redirect to home page
-        out.println("<script type=\"text/javascript\">");
-        out.println("alert('No URL is found, please check your input');");
-        out.println("location='index.html';");
-        out.println("</script>");
-        out.close();
-      } else {
-        response.sendRedirect(responseUrl);
-      }
+    boolean isUserLoggedIn = ServletHelper.USERSERVICE.isUserLoggedIn();
+    String responseUrl = fetchUrlFromShortcut(requestUrl.substring(1), isUserLoggedIn);
+    if (responseUrl != null) {
+      // URL found, redirect
+      response.sendRedirect(responseUrl);
+    } else if (isUserLoggedIn) {
+      // URL not found and the user is logged in, show the error message
+      ServletHelper.showErrorMsg(NOT_FOUND_ERROR_MESSAGE, response.getWriter());
     } else {
+      // URL not found and the user is not logged in, prompt to login
       response.sendRedirect(ServletHelper.USERSERVICE.createLoginURL(HOME_PAGE));
     }
   }
@@ -50,6 +42,23 @@ public class RedirectionServlet extends HttpServlet {
     response.sendRedirect(shortcut);
   }
 
-  /** Private constants for different types of link */
+  /** Searches and returns the url mapped by the given shortcut in the DataStore 
+   *  @return the url string if presented in the DataStore, null otherwise.
+   */
+  private static String fetchUrlFromShortcut(String shortcut, boolean isUserLoggedIn) {
+    String responseUrl = null;
+    // If the user has logged in, search the private DataStore first
+    if (isUserLoggedIn) {
+      String userEmail = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
+      responseUrl = ServletHelper.fetchUrlWithDefault(shortcut, userEmail, null);
+    }
+    if (responseUrl == null) {
+      // Either the user is not log in or the shortcut may be public
+      responseUrl = ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null);
+    }
+    return responseUrl;
+  }
+
   private static final String HOME_PAGE = "/index.html";
+  private static final String NOT_FOUND_ERROR_MESSAGE = "No URL is found, please check your input.";
 }
