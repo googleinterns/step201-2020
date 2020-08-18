@@ -78,7 +78,7 @@ function goPrivate(btn) {
           if (stats.trim() === "Wrong user.") {
             window.alert("Only the creator can modify this status.");
           } else if (stats.trim() === "Repeated shortcut.") {
-            window.alert("The shortcut already exists. Consider changing it.");
+            window.alert("The shortcut already exist in your list.");
           } else {
             $(btn).closest('tr').remove();
           }
