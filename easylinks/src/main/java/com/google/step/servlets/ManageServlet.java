@@ -74,9 +74,8 @@ public class ManageServlet extends HttpServlet {
     String url = ServletHelper.getParameterWithDefault(request, "url", "");
     String email = ServletHelper.USERSERVICE.getCurrentUser().getEmail();
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty() ||
-        ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null ||
-        ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
-      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
+        ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null) {
+      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, MANAGE_PAGE, response.getWriter());
       return;
     }
 
@@ -101,7 +100,7 @@ public class ManageServlet extends HttpServlet {
     if (shortcut.isEmpty() || shortcut.startsWith(PROVIDED_LINK) || url.isEmpty() ||
         ServletHelper.fetchUrlWithDefault(shortcut, email, null) != null ||
         ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
-      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
+      ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, MANAGE_PAGE, response.getWriter());
       return;
     }
 
@@ -136,7 +135,7 @@ public class ManageServlet extends HttpServlet {
       // Check if the shortcut already created in the DataStore
       if (ServletHelper.fetchUrlWithDefault(shortcut, ServletHelper.ADMIN, null) != null) {
         // The shorcut already exists
-        ServletHelper.showErrorMsg(CHANGE_LINK_ERROR, response.getWriter());
+        response.getWriter().println("Repeated shortcut.");
         return;
       }
       easyLinkEntity.setProperty("email", ServletHelper.ADMIN);
@@ -159,7 +158,14 @@ public class ManageServlet extends HttpServlet {
 
       // Check if the user is the creator of the public link
       if (!creator.equals((String) ServletHelper.USERSERVICE.getCurrentUser().getEmail())) {
-        ServletHelper.showErrorMsg(WRONG_USER_ERROR, response.getWriter());
+        response.getWriter().println("Wrong user.");
+        return;
+      }
+
+      if (ServletHelper.fetchUrlWithDefault(shortcut, 
+              (String) easyLinkEntity.getProperty("creator"), null) != null) {
+        // The shorcut already exists
+        response.getWriter().println("Repeated shortcut.");
         return;
       }
       
@@ -172,6 +178,7 @@ public class ManageServlet extends HttpServlet {
   }
 
     private static final String PROVIDED_LINK = "~";
+    private static final String MANAGE_PAGE = "manage.html";
     private static final String CHANGE_LINK_ERROR = "Process Failed. The reasons may be: \\n"
                                     + "The shortcut is an empty string.\\n"
                                     + "The shortcut starts with '~'.\\n"
