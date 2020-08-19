@@ -31,7 +31,7 @@ public class ManageServlet extends HttpServlet {
     // sorts links in alphabetically by shortcut
     if (email == null) return;
     Filter emailFilter =
-        new FilterPredicate("email", FilterOperator.EQUAL, email);
+        new FilterPredicate("creator", FilterOperator.EQUAL, email);
     Query query = new Query("Link")
                       .setFilter(emailFilter)
                       .addSort("shortcut", SortDirection.ASCENDING);
@@ -81,8 +81,10 @@ public class ManageServlet extends HttpServlet {
 
     // Add the mapping to the DataStore
     Entity easyLinkEntity = new Entity("Link");
+    easyLinkEntity.setProperty("status", "Private");
     easyLinkEntity.setProperty("shortcut", shortcut);
     easyLinkEntity.setProperty("url", url);
+    easyLinkEntity.setProperty("creator", email);
     easyLinkEntity.setProperty("email", email);
 
     ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
@@ -138,8 +140,8 @@ public class ManageServlet extends HttpServlet {
         response.getWriter().println("Repeated shortcut.");
         return;
       }
+      easyLinkEntity.setProperty("status", "Public");
       easyLinkEntity.setProperty("email", ServletHelper.ADMIN);
-      easyLinkEntity.setProperty("creator", ServletHelper.USERSERVICE.getCurrentUser().getEmail());
       ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
     } catch(Exception e) {
       response.getWriter().println("Invalid ID.");
@@ -169,6 +171,7 @@ public class ManageServlet extends HttpServlet {
         return;
       }
       
+      easyLinkEntity.setProperty("status", "Private");
       easyLinkEntity.setProperty("email", (String) easyLinkEntity.getProperty("creator"));
       ServletHelper.DEFAULT_DATASTORE_SERVICE.put(easyLinkEntity);
     } catch(Exception e) {
