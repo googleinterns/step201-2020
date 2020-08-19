@@ -98,6 +98,7 @@ button:hover {
 
 .table-container {
   position: fixed;
+  width: 60%;
   left: 50%;
   transform: translate(-50%);
 }
