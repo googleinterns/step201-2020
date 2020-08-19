@@ -182,8 +182,6 @@ function getLinkbyShortcut() {
 
   links.forEach((link) => { 
     if (link.propertyMap.shortcut.startsWith(document.getElementById('shortcut').value)) {
-      noresult = false;
-      
       var row = tablebody.insertRow();
       row.insertCell(0).innerHTML = link.key.id;
       row.insertCell(1).innerHTML = link.propertyMap.status;
