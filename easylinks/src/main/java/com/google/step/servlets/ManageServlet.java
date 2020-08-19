@@ -187,21 +187,6 @@ public class ManageServlet extends HttpServlet {
     response.sendRedirect("/manage.html");
   }
 
-  // private static void getPublicLinksbyOthers(String email) {
-  //   // Filter the links that are public and created by others
-  //   Filter publicFilter =
-  //     new FilterPredicate("email", FilterOperator.EQUAL, ServletHelper.ADMIN);
-  //   Filter otherFilter =
-  //     new FilterPredicate("creator", FilterOperator.NOT_EQUAL, email);
-  //   CompositeFilter publicByOthersFilter =
-  //     CompositeFilterOperator.and(publicFilter, otherFilter);
-
-  //   Query query = new Query("Link")
-  //                     .setFilter(emailFilter)
-  //                     .addSort("shortcut", SortDirection.ASCENDING);
-  //   PreparedQuery results = ServletHelper.DEFAULT_DATASTORE_SERVICE.prepare(query);
-  // }
-
     private static final String PROVIDED_LINK = "~";
     private static final String MANAGE_PAGE = "manage.html";
     private static final String CHANGE_LINK_ERROR = "Process Failed. The reasons may be: \\n"
