@@ -73,22 +73,7 @@ function displayLinks() {
       links.slice(offset, offset + ROWS_PER_PAGE) :
       links.slice(offset);
 
-  slice.forEach((link) => {
-    // Add a row to the table, which looks like
-    // id, shortcut, url, edit button, delete button, go-public button
-    var row = tablebody.insertRow();
-    row.insertCell(0).innerHTML = link.key.id;
-    row.insertCell(1).innerHTML = link.propertyMap.status;
-    row.insertCell(2).innerHTML = link.propertyMap.shortcut;
-    addWordBreakToCell(row.insertCell(3), createHyperLink(link.propertyMap.url));
-    row.insertCell(4).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
-    row.insertCell(5).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
-    if (link.propertyMap.status === "Private") {
-      row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
-    } else {
-      row.insertCell(6).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
-    }
-  });
+  slice.forEach((link) => { addLinktoTable(link, tablebody); });
   
   // Hide id
   $("tr td:first-child, th:eq(0)").hide();
@@ -182,23 +167,41 @@ function getLinkbyShortcut() {
 
   links.forEach((link) => { 
     if (link.propertyMap.shortcut.startsWith(document.getElementById('shortcut').value)) {
-      var row = tablebody.insertRow();
-      row.insertCell(0).innerHTML = link.key.id;
-      row.insertCell(1).innerHTML = link.propertyMap.status;
-      row.insertCell(2).innerHTML = link.propertyMap.shortcut;
-      addWordBreakToCell(row.insertCell(3), createHyperLink(link.propertyMap.url));
-      row.insertCell(4).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
-      row.insertCell(5).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
-      if (link.propertyMap.status === "Private") {
-        row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
-      } else {
-        row.insertCell(6).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
-      }
-
+      addLinktoTable(link, tablebody);
+      
       // Hide id
       $("tr td:first-child, th:eq(0)").hide();
     }
   });
+}
+
+// Adds a row to the table, which looks like
+// id(hidden), shortcut, url, edit button, delete button, go-public/private button
+function addLinktoTable(link, tablebody) {
+  var row = tablebody.insertRow();
+  row.insertCell(0).innerHTML = link.key.id;
+  row.insertCell(1).innerHTML = link.propertyMap.status;
+  row.insertCell(2).innerHTML = link.propertyMap.shortcut;
+  addWordBreakToCell(row.insertCell(3), createHyperLink(link.propertyMap.url));
+
+  // Add operation buttons if the user is the creator of the link,
+  // otherwise, display "N/A"
+  fetch('/~login', {method: 'POST'})
+    .then(response => response.text()).then((email) => {
+      if (link.propertyMap.creator === email.trim()) {
+        row.insertCell(4).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
+        row.insertCell(5).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
+        if (link.propertyMap.status === "Private") {
+          row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
+        } else {
+          row.insertCell(6).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
+        }
+      } else {
+        row.insertCell(4).innerHTML = "N/A";
+        row.insertCell(5).innerHTML = "N/A";
+        row.insertCell(6).innerHTML = "N/A";
+      }
+    });
 }
 
 function redirectToManagePage() {
