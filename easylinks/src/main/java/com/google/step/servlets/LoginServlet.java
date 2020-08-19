@@ -23,4 +23,11 @@ public class LoginServlet extends HttpServlet {
                                                 .createLoginURL("/index.html"));
     }
   }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("text/html");
+    response.getWriter().println(ServletHelper.USERSERVICE
+                                              .getCurrentUser().getEmail());
+  }
 }

@@ -9,6 +9,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Entity;
@@ -27,11 +29,16 @@ public class ManageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     final String email = ServletHelper.USERSERVICE.isUserLoggedIn() ?
         ServletHelper.USERSERVICE.getCurrentUser().getEmail() : null;
-    // Define a query rule that retreives records based on email and 
-    // sorts links in alphabetically by shortcut
+    // Define a query rule that retreives public links and private links created by the user 
+    // and sorts links alphabetically by shortcut
     if (email == null) return;
-    Filter emailFilter =
-        new FilterPredicate("creator", FilterOperator.EQUAL, email);
+    Filter privateFilter =
+        new FilterPredicate("email", FilterOperator.EQUAL, email);
+    Filter publicFilter =
+        new FilterPredicate("email", FilterOperator.EQUAL, ServletHelper.ADMIN);
+    CompositeFilter emailFilter =
+        CompositeFilterOperator.or(privateFilter, publicFilter);
+
     Query query = new Query("Link")
                       .setFilter(emailFilter)
                       .addSort("shortcut", SortDirection.ASCENDING);
@@ -179,6 +186,21 @@ public class ManageServlet extends HttpServlet {
     }
     response.sendRedirect("/manage.html");
   }
+
+  // private static void getPublicLinksbyOthers(String email) {
+  //   // Filter the links that are public and created by others
+  //   Filter publicFilter =
+  //     new FilterPredicate("email", FilterOperator.EQUAL, ServletHelper.ADMIN);
+  //   Filter otherFilter =
+  //     new FilterPredicate("creator", FilterOperator.NOT_EQUAL, email);
+  //   CompositeFilter publicByOthersFilter =
+  //     CompositeFilterOperator.and(publicFilter, otherFilter);
+
+  //   Query query = new Query("Link")
+  //                     .setFilter(emailFilter)
+  //                     .addSort("shortcut", SortDirection.ASCENDING);
+  //   PreparedQuery results = ServletHelper.DEFAULT_DATASTORE_SERVICE.prepare(query);
+  // }
 
     private static final String PROVIDED_LINK = "~";
     private static final String MANAGE_PAGE = "manage.html";
