@@ -183,19 +183,23 @@ function addLinktoTable(link, tablebody) {
   row.insertCell(1).innerHTML = link.propertyMap.status;
   row.insertCell(2).innerHTML = link.propertyMap.shortcut;
   addWordBreakToCell(row.insertCell(3), createHyperLink(link.propertyMap.url));
-  row.insertCell(4).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
-  row.insertCell(5).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
 
+  // Add operation buttons if the user is the creator of the link,
+  // otherwise, display "N/A"
   fetch('/~login', {method: 'POST'})
     .then(response => response.text()).then((email) => {
       if (link.propertyMap.creator === email.trim()) {
+        row.insertCell(4).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
+        row.insertCell(5).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
         if (link.propertyMap.status === "Private") {
           row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
         } else {
           row.insertCell(6).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
         }
       } else {
-        row.insertCell(6).innerHTML = "Not available";
+        row.insertCell(4).innerHTML = "N/A";
+        row.insertCell(5).innerHTML = "N/A";
+        row.insertCell(6).innerHTML = "N/A";
       }
     });
 }
