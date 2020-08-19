@@ -54,36 +54,15 @@ function showPublicLinksInCurrentPage() {
       tableElement.innerHTML = '';
       links.forEach((link) => {
         let row = tableElement.insertRow();
-        row.insertCell(0).innerHTML = link.key.id;
-        row.insertCell(1).innerHTML = link.propertyMap.shortcut;
-        addWordBreakToCell(row.insertCell(2), link.propertyMap.url);
-        row.insertCell(3).innerHTML = createMailtoString(link.propertyMap.creator);
-        row.insertCell(4).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
+        row.insertCell(0).innerHTML = link.propertyMap.shortcut;
+        addWordBreakToCell(row.insertCell(1), link.propertyMap.url);
+        row.insertCell(2).innerHTML = createMailtoString(link.propertyMap.creator);
+        
       });
-      $("tr td:first-child, th:eq(0)").hide();
     });
 
   const pageElement = document.getElementById('pageNumber');
   pageElement.innerHTML = ` Page ${currentPage + 1}/${PUBLIC_LINK_TOTAL_PAGE} `;
-}
-
-function goPrivate(btn) {
-  var message = "Are you sure you want to make this link private?";
-  if (window.confirm(message)) {
-    const params = new URLSearchParams();
-    params.append('id', $(btn).closest("tr").find("td:first").text());
-    params.append('action', 'go-private');
-    fetch('/~manage', {method: 'POST', body: params}).then(res => res.text())
-        .then(stats => {
-          if (stats.trim() === "Wrong user.") {
-            window.alert("Only the creator can modify this status.");
-          } else if (stats.trim() === "Repeated shortcut.") {
-            window.alert("The shortcut already exist in your list.");
-          } else {
-            $(btn).closest('tr').remove();
-          }
-        });
-  }
 }
 
 /** Adds the word-break rule to the cell */
