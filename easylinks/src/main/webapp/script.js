@@ -83,15 +83,20 @@ function displayLinks() {
     addWordBreakToCell(row.insertCell(3), createHyperLink(link.propertyMap.url));
     row.insertCell(4).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
     row.insertCell(5).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
-    row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
-    row.insertCell(7).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
+    if (link.propertyMap.status === "Private") {
+      row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
+    } else {
+      row.insertCell(6).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
+    }
   });
+  
+  // Hide id
+  $("tr td:first-child, th:eq(0)").hide();
   
   if (TOTAL_PAGES !== 0) {
     const pageElement = document.getElementById('pageNumber');
     pageElement.innerHTML = ` Page ${offset / ROWS_PER_PAGE + 1}/${TOTAL_PAGES} `;
   }
-  $("tr td:first-child, th:eq(0)").hide();
 }
 
 /** Creates an element that represents a clickable url. */
@@ -187,8 +192,11 @@ function getLinkbyShortcut() {
       addWordBreakToCell(row.insertCell(3), createHyperLink(link.propertyMap.url));
       row.insertCell(4).innerHTML = "<button onclick='editLink(this)'>Edit</button>";
       row.insertCell(5).innerHTML = "<button onclick='deleteLink(this)'>Delete</button>";
-      row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
-      row.insertCell(7).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
+      if (link.propertyMap.status === "Private") {
+        row.insertCell(6).innerHTML = "<button onclick='goPublic(this)'>Go public</button>";
+      } else {
+        row.insertCell(6).innerHTML = "<button onclick='goPrivate(this)'>Go private</button>";
+      }
 
       // Hide id
       $("tr td:first-child, th:eq(0)").hide();
