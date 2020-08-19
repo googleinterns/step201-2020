@@ -176,15 +176,12 @@ function goPrivate(btn) {
 }
 
 function getLinkbyShortcut() {
-  var noresult = true;
-  links.forEach((link) => { 
-    if (link.propertyMap.shortcut === document.getElementById('shortcut').value) {
-      noresult = false;
+  // Empty the table
+  var tablebody = document.getElementById('link-container-body');
+  $('#link-container-body').empty();
 
-      // Empty the table
-      var tablebody = document.getElementById('link-container-body');
-      $('#link-container-body').empty();
-      
+  links.forEach((link) => { 
+    if (link.propertyMap.shortcut.startsWith(document.getElementById('shortcut').value)) {
       var row = tablebody.insertRow();
       row.insertCell(0).innerHTML = link.key.id;
       row.insertCell(1).innerHTML = link.propertyMap.status;
@@ -200,11 +197,8 @@ function getLinkbyShortcut() {
 
       // Hide id
       $("tr td:first-child, th:eq(0)").hide();
-      return;
     }
   });
-  
-  if (noresult) alert("No matching shortcut is found");
 }
 
 function redirectToManagePage() {
