@@ -111,6 +111,7 @@ button:hover {
 #link-container td, #link-container th {
   border: 1px solid #ddd;
   padding: 5px;
+  text-align: center;
 }
 
 #link-container tr:nth-child(even) {

@@ -3,11 +3,5 @@ indexes:
 - kind: Link
   ancestor: no
   properties:
-  - name: status
-    direction: asc
-  - name: shortcut
-    direction: asc
   - name: creator
-    direction: asc
-  - name: email
-    direction: asc
+  - name: shortcut

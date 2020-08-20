@@ -39,7 +39,8 @@ public class PeopleSearchServlet extends HttpServlet {
     out.println("<body>");
     if (emails.isEmpty()) {
       out.println("<p class='signal'>No result</p>");
-      out.println("<button onclick='redirectToHomePage()' type='button'>Back</button>");
+      out.print("<button onclick='redirectToHomePage()' class='redirectbutton' ");
+      out.println("type='button'>Back</button>");
     } else {
       // Display all matching emails
       out.println("<h1 style='text-align: center'>Possible Email Addresses</h1>");
