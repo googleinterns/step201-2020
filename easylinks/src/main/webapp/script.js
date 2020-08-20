@@ -112,8 +112,8 @@ function editLink(btn) {
   closeAddForm();
   $("#edit-form").show();
   $("#ed-id").val($(btn).closest("tr").find("td:eq(0)").html());
-  $("#ed-shortcut").val($(btn).closest("tr").find("td:eq(1)").html());
-  $("#ed-url").val($(btn).closest("tr").find("td:eq(2)").html());
+  $("#ed-shortcut").val($(btn).closest("tr").find("td:eq(2)").html());
+  $("#ed-url").val($(btn).closest("tr").find("td:eq(3)").html());
 }
 
 /** Close the edit form. */
